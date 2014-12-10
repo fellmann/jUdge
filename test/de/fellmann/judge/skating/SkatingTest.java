@@ -28,19 +28,34 @@ public class SkatingTest {
 		
 		for(int i=0;i<6;i++)
 		{
-			System.out.println(test.getMajorFunc()[0].getMinPlace(i) + " - " + test.getMajorFunc()[0].getMaxPlace(i));
+			System.out.println(test.getMinPlace(0, i) + " - " + test.getMaxPlace(0, i));
 		}
 		
-		assertResultFromString(test, "2;4;3;1;0;0");
+		assertPreResultFromString(test, "2-2;4-4;3-3;1-1;5-6;5-6");
+	}
+
+	private void assertPreResultFromString(SkatingCalc test, String result) {
+		String [] resultForDance = result.split(";");
+		
+		for(int i=0;i<resultForDance.length;i++)
+		{
+			String[] resultForCompetitor = resultForDance[i].split(",");
+			for(int j=0;j<resultForCompetitor.length;j++)
+			{
+				String[] minmax = resultForCompetitor[j].split("-");
+				assertEquals(Double.valueOf(minmax[0]), test.getMinPlace(j, i).getPlace(), 0.01);
+				assertEquals(Double.valueOf(minmax[1]), test.getMaxPlace(j, i).getPlace(), 0.01);
+			}
+		}
 	}
 
 	private void assertResultFromString(SkatingCalc test, String result) {
-		assertEquals(new Place(1), test.getPlatz(0));
-		assertEquals(new Place(2), test.getPlatz(1));
-		assertEquals(new Place(3), test.getPlatz(2));
-		assertEquals(new Place(4), test.getPlatz(3));
-		assertEquals(new Place(5), test.getPlatz(4));
-		assertEquals(new Place(6), test.getPlatz(5));
+		assertEquals(new Place(1), test.getPlace(0));
+		assertEquals(new Place(2), test.getPlace(1));
+		assertEquals(new Place(3), test.getPlace(2));
+		assertEquals(new Place(4), test.getPlace(3));
+		assertEquals(new Place(5), test.getPlace(4));
+		assertEquals(new Place(6), test.getPlace(5));
 		
 		String [] resultForDance = result.split(";");
 		
@@ -49,7 +64,7 @@ public class SkatingTest {
 			String[] resultForCompetitor = resultForDance[i].split(",");
 			for(int j=0;j<resultForCompetitor.length;j++)
 			{
-				assertEquals(Double.valueOf(resultForCompetitor[j]), test.getMajorFunc()[j].getPlatz(i).getPlace(), 0.01);
+				assertEquals(Double.valueOf(resultForCompetitor[j]), test.getPlace(j, i).getPlace(), 0.01);
 			}
 		}
 	}

@@ -48,11 +48,11 @@ public class SkatingCalc {
 		IntList v = new IntList();
 		for (int i = 0; i < remaining.size(); i++) {
 			x = remaining.get(i);
-			if (skatingCalc.getPlatz(x).getPlace() < maxP) {
-				maxP = skatingCalc.getPlatz(x).getPlace();
+			if (skatingCalc.getPlace(x).getPlace() < maxP) {
+				maxP = skatingCalc.getPlace(x).getPlace();
 				v.clear();
 			}
-			if (skatingCalc.getPlatz(x).getPlace() == maxP) {
+			if (skatingCalc.getPlace(x).getPlace() == maxP) {
 				v.add(x);
 			}
 		}
@@ -73,7 +73,7 @@ public class SkatingCalc {
 
 		for (int ix = 0; ix < killed.size(); ix++) {
 			x = killed.get(ix);
-			platz[x] = skatingCalc.getPlatz(x);
+			platz[x] = skatingCalc.getPlace(x);
 		}
 
 		remaining.removeAll(killed);
@@ -137,8 +137,8 @@ public class SkatingCalc {
 			if (which.contains(competitor)) {
 				cur = 0;
 				for (int i = 0; i < judgement.getDances(); i++) {
-					if (dancesCalc[i].getPlatz(competitor).getPlace() <= aidx)
-						cur += dancesCalc[i].getPlatz(competitor).getPlace();
+					if (dancesCalc[i].getPlace(competitor).getPlace() <= aidx)
+						cur += dancesCalc[i].getPlace(competitor).getPlace();
 				}
 				tabelle2[competitor][aidx - 1] = cur;
 				if (cur < max) {
@@ -170,7 +170,7 @@ public class SkatingCalc {
 			if (which.contains(competitor)) {
 				cur = 0;
 				for (int i = 0; i < judgement.getDances(); i++) {
-					if (dancesCalc[i].getPlatz(competitor).getPlace() <= aidx)
+					if (dancesCalc[i].getPlace(competitor).getPlace() <= aidx)
 						cur++;
 				}
 				tabelle1[competitor][aidx - 1] = cur;
@@ -214,8 +214,32 @@ public class SkatingCalc {
 	public SkatingCalc() {
 	}
 
-	public Place getPlatz(int i) {
-		return platz[i];
+	public Place getPlace(int competitor) {
+		return platz[competitor];
+	}
+	
+	public Place getPlace(int dance, int competitor)
+	{
+		if(dancesCalc[dance] != null)
+			return dancesCalc[dance].getPlace(competitor);
+		else
+			return null;
+	}
+	
+	public Place getMinPlace(int dance, int competitor)
+	{
+		if(dancesCalc[dance] != null)
+			return dancesCalc[dance].getMinPlace(competitor);
+		else
+			return null;
+	}
+	
+	public Place getMaxPlace(int dance, int competitor)
+	{
+		if(dancesCalc[dance] != null)
+			return dancesCalc[dance].getMaxPlace(competitor);
+		else
+			return null;
 	}
 
 	IntList getMinSums(IntList which) {
@@ -226,9 +250,9 @@ public class SkatingCalc {
 
 		for (int ix = 0; ix < which.size(); ix++) {
 			x = which.get(ix);
-			cur = dancesCalc[0].getPlatz(x).getPlace();
+			cur = dancesCalc[0].getPlace(x).getPlace();
 			for (int i = 1; i < judgement.getDances(); i++) {
-				cur += dancesCalc[i].getPlatz(x).getPlace();
+				cur += dancesCalc[i].getPlace(x).getPlace();
 			}
 			summe[x] = cur;
 			// varTabelle2[x][aidx]=cur;

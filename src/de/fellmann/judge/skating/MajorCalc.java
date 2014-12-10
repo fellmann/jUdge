@@ -225,7 +225,7 @@ class MajorCalc {
 		return isCalc;
 	}
 
-	public Place getPlatz(int i) {
+	public Place getPlace(int i) {
 		return result[i];
 	}
 
