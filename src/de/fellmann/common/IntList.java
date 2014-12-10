@@ -17,6 +17,16 @@ public class IntList {
     	source = (ArrayList<Integer>) toClone.source.clone();
     }
     
+    public static IntList getFromTo(int from, int to)
+    {
+		IntList all = new IntList();
+
+		for (int i = from; i <= to; i++) {
+			all.add(i);
+		}
+		return all;
+    }
+    
     public IntList byval() {
     	return new IntList(this);
     }

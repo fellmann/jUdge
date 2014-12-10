@@ -133,20 +133,20 @@ public class SkatingCalc {
 		double max = 999999;
 		double cur;
 
-		for (int acur = 0; acur < judgement.getCompetitors(); acur++) {
-			if (which.contains(acur)) {
+		for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (which.contains(competitor)) {
 				cur = 0;
 				for (int i = 0; i < judgement.getDances(); i++) {
-					if (dancesCalc[i].getPlatz(acur).getPlace() <= aidx)
-						cur += dancesCalc[i].getPlatz(acur).getPlace();
+					if (dancesCalc[i].getPlatz(competitor).getPlace() <= aidx)
+						cur += dancesCalc[i].getPlatz(competitor).getPlace();
 				}
-				tabelle2[acur][aidx - 1] = cur;
+				tabelle2[competitor][aidx - 1] = cur;
 				if (cur < max) {
 					max = cur;
 					res.clear();
-					res.add(acur);
+					res.add(competitor);
 				} else if (max == cur) {
-					res.add(acur);
+					res.add(competitor);
 				}
 			}
 		}
@@ -166,20 +166,20 @@ public class SkatingCalc {
 		if (which.size() == 1)
 			return which;
 
-		for (int acur = 0; acur < judgement.getCompetitors(); acur++) {
-			if (which.contains(acur)) {
+		for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (which.contains(competitor)) {
 				cur = 0;
 				for (int i = 0; i < judgement.getDances(); i++) {
-					if (dancesCalc[i].getPlatz(acur).getPlace() <= aidx)
+					if (dancesCalc[i].getPlatz(competitor).getPlace() <= aidx)
 						cur++;
 				}
-				tabelle1[acur][aidx - 1] = cur;
+				tabelle1[competitor][aidx - 1] = cur;
 				if (cur > max) {
 					max = cur;
 					res.clear();
-					res.add(acur);
+					res.add(competitor);
 				} else if (max == cur) {
-					res.add(acur);
+					res.add(competitor);
 				}
 			}
 		}
@@ -193,11 +193,11 @@ public class SkatingCalc {
 
 	void getPlatzierungen() {
 		for (int aidx = 0; aidx < judgement.getDances(); aidx++) {
-			for (int acur = 0; acur < judgement.getCompetitors(); acur++) {
-				platzierungen[acur][aidx] = 0;
-				for (int ajur = 0; ajur < judgement.getJudges(); ajur++) {
-					if (aidx + 1 >= judgement.getJudgment(aidx, acur, ajur)) {
-						platzierungen[acur][aidx]++;
+			for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+				platzierungen[competitor][aidx] = 0;
+				for (int judge = 0; judge < judgement.getJudges(); judge++) {
+					if (aidx + 1 >= judgement.getJudgment(aidx, competitor, judge)) {
+						platzierungen[competitor][aidx]++;
 					}
 				}
 			}

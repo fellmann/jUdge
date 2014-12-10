@@ -12,11 +12,11 @@ class MajorCalc {
 	private JudgementForMajor judgement = null;
 	private double[][] tabelle1;
 	private double[][] tabelle2;
-	
+
 	private Place[] result;
 	private Place[] minPlace;
 	private Place[] maxPlace;
-	
+
 	private byte[][] placeSums;
 
 	private int majorit;
@@ -74,7 +74,8 @@ class MajorCalc {
 					}
 				} else {
 					if (startColumn < judgement.getCompetitors() - 1) {
-						calcPlaces(startColumn + 1, wantedPlace, curSums.byval());
+						calcPlaces(startColumn + 1, wantedPlace,
+								curSums.byval());
 						curmaj.removeAll(curSums);
 					} else {
 						for (int ix = 0; ix < curSums.size(); ix++) {
@@ -148,19 +149,19 @@ class MajorCalc {
 		IntList res = new IntList();
 		int max = -1;
 
-		for (int acur = 0; acur < judgement.getCompetitors(); acur++) {
-			if (which.contains(acur)) {
+		for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (which.contains(competitor)) {
 				if ((!calcOne || calculatedCount < 1)
 						&& column < judgement.getCompetitors())
-					tabelle1[acur][column] = getPlatzierung(acur, column);
+					tabelle1[competitor][column] = getPlatzierung(competitor, column);
 
-				if (getPlatzierung(acur, column) >= majorit
-						&& getPlatzierung(acur, column) > max) {
-					max = getPlatzierung(acur, column);
+				if (getPlatzierung(competitor, column) >= majorit
+						&& getPlatzierung(competitor, column) > max) {
+					max = getPlatzierung(competitor, column);
 					res.clear();
-					res.add(acur);
-				} else if (max == getPlatzierung(acur, column)) {
-					res.add(acur);
+					res.add(competitor);
+				} else if (max == getPlatzierung(competitor, column)) {
+					res.add(competitor);
 				}
 			}
 		}
@@ -169,19 +170,19 @@ class MajorCalc {
 	}
 
 	void getPlatzierungen() {
-		for (int acur = 0; acur < judgement.getCompetitors(); acur++) {
-			if (judgement.isSet(acur)) {
-				getPlatzierungen(acur);
+		for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (judgement.isSet(competitor)) {
+				getPlatzierungen(competitor);
 			}
 		}
 	}
 
-	void getPlatzierungen(int acur) {
+	void getPlatzierungen(int competitor) {
 		for (int column = 0; column < judgement.getCompetitors(); column++) {
-			placeSums[acur][column] = 0;
+			placeSums[competitor][column] = 0;
 			for (int ajur = 0; ajur < judgement.getJudges(); ajur++) {
-				if (column + 1 >= judgement.getJudgement(acur, ajur)) {
-					placeSums[acur][column]++;
+				if (column + 1 >= judgement.getJudgement(competitor, ajur)) {
+					placeSums[competitor][column]++;
 				}
 			}
 		}
@@ -195,18 +196,17 @@ class MajorCalc {
 	public void set(int teilnehmer, int teilnehmerCount, int juryCount,
 			byte wertungen[]) {
 		throw new RuntimeException("not implemented");
-//		varGrades = varGrades.getJudgement(acur, ajur);
-//		for (int i = 0; i < juryCount; i++) {
-//			JudgementForCompetitor judgement = new JudgementForCompetitor();
-//			for (int j = 0; j < wertungen.length; j++) {
-//				judgement.addGrade(new Judgement(wertungen[i]));
-//			}
-//			varGrades.addJudgement(judgement);
-//		}
+		// varGrades = varGrades.getJudgement(competitor, ajur);
+		// for (int i = 0; i < juryCount; i++) {
+		// JudgementForCompetitor judgement = new JudgementForCompetitor();
+		// for (int j = 0; j < wertungen.length; j++) {
+		// judgement.addGrade(new Judgement(wertungen[i]));
+		// }
+		// varGrades.addJudgement(judgement);
+		// }
 	}
-	
-	public JudgementForMajor getJudgement()
-	{
+
+	public JudgementForMajor getJudgement() {
 		return judgement;
 	}
 
@@ -215,14 +215,6 @@ class MajorCalc {
 	}
 
 	public void clearInit() {
-		for (int i = 0; i < judgement.getCompetitors(); i++) {
-			for (int j = 0; j < judgement.getCompetitors(); j++) {
-				tabelle1[i][j] = -1;
-				tabelle2[i][j] = -1;
-			}
-			minPlace[i] = null;
-			maxPlace[i] = null;
-		}
 	}
 
 	public void clear() {
@@ -237,36 +229,31 @@ class MajorCalc {
 		return result[i];
 	}
 
-	public void calc() {
-
-		prepareForCalc();
-		calc(getAllVector());
+	public void calcInternal() {
+		init();
+		calc(IntList.getFromTo(0, judgement.getCompetitors()-1));
 		isCalc = true;
 	}
 
-	void prepareForCalc() {
-
-		if (placeSums == null || placeSums.length != judgement.getCompetitors()) {
-			placeSums = new byte[judgement.getCompetitors()][judgement
-					.getCompetitors()];
-			tabelle1 = new double[judgement.getCompetitors()][judgement
-					.getCompetitors()];
-			tabelle2 = new double[judgement.getCompetitors()][judgement
-					.getCompetitors()];
-			result = new Place[judgement.getCompetitors()];
-			minPlace = new Place[judgement.getCompetitors()];
-			maxPlace = new Place[judgement.getCompetitors()];
-		}
-		clearInit();
-	}
-
-	IntList getAllVector() {
-		IntList all = new IntList();
-
+	private void init() {
+		placeSums = new byte[judgement.getCompetitors()][judgement
+				.getCompetitors()];
+		tabelle1 = new double[judgement.getCompetitors()][judgement
+				.getCompetitors()];
+		tabelle2 = new double[judgement.getCompetitors()][judgement
+				.getCompetitors()];
+		result = new Place[judgement.getCompetitors()];
+		minPlace = new Place[judgement.getCompetitors()];
+		maxPlace = new Place[judgement.getCompetitors()];
+		
 		for (int i = 0; i < judgement.getCompetitors(); i++) {
-			all.add(i);
+			for (int j = 0; j < judgement.getCompetitors(); j++) {
+				tabelle1[i][j] = -1;
+				tabelle2[i][j] = -1;
+			}
+			minPlace[i] = null;
+			maxPlace[i] = null;
 		}
-		return all;
 	}
 
 	private void calc(IntList all) {
@@ -306,42 +293,51 @@ class MajorCalc {
 
 	// **************************************************************************
 
-	public void precalc() {
-		int acur, sc = 0;
-		double minunset = (40 + 1) * 10;
-		double maxunset = -1;
+	public void calc() {
+		int competitor, sc = 0;
+		Place minunset = new Place(100);
+		Place maxunset = new Place(0);
 
-		prepareForCalc();
+		init();
 		getPlatzierungen();
 
-		for (acur = 0; acur < judgement.getCompetitors(); acur++) {
-			if (judgement.isSet(acur)) {
+		for (competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (judgement.isSet(competitor)) {
 				sc++;
-				minPlace[acur] = new Place(100);
-				maxPlace[acur] = null;
-			} else {
-				minPlace[acur] = null;
-				maxPlace[acur] = null;
-			}
+				minPlace[competitor] = new Place(100);
+				maxPlace[competitor] = new Place(0);
+			} 
 		}
 
-		for (int i = 0; i < judgement.getCompetitors() - sc + 1; i++) {
-			getPrePlatzierungen(i, true);
-			calc(getAllVector());
+		if (sc == judgement.getCompetitors()) {
+			calcInternal();
+		} else {
+			for (int i = 0; i < judgement.getCompetitors() - sc + 1; i++) {
+				getPrePlatzierungen(i, true);
+				calc(IntList.getFromTo(0, judgement.getCompetitors()-1));
 
-			for (acur = 0; acur < judgement.getCompetitors(); acur++) {
-				if (judgement.isSet(acur)) {
-					if (result[acur].getPlace() < minPlace[acur].getPlace())
-						minPlace[acur] = result[acur];
-					if (result[acur].getPlace() > maxPlace[acur].getPlace())
-						maxPlace[acur] = result[acur];
-				} else {
-					if (result[acur].getPlace() < minunset)
-						minunset = result[acur].getPlace();
-					if (result[acur].getPlace() > maxunset)
-						maxunset = result[acur].getPlace();
+				for (competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+					if (judgement.isSet(competitor)) {
+						if (result[competitor].getPlace() < minPlace[competitor].getPlace())
+							minPlace[competitor] = result[competitor];
+						if (result[competitor].getPlace() > maxPlace[competitor].getPlace())
+							maxPlace[competitor] = result[competitor];
+					} else {
+						if (result[competitor].getPlace() < minunset.getPlace())
+							minunset = result[competitor];
+						if (result[competitor].getPlace() > maxunset.getPlace())
+							maxunset = result[competitor];
+					}
 				}
 			}
+
+		}
+		
+		for (competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (!judgement.isSet(competitor)) {
+				minPlace[competitor] = minunset;
+				maxPlace[competitor] = maxunset;
+			} 
 		}
 
 	}
@@ -356,16 +352,16 @@ class MajorCalc {
 
 	void getPrePlatzierungen(int gc, boolean dogood) {
 		IntList good = new IntList(), bad = new IntList(), gone = new IntList();
-		int acur, column, csum, cidx;
+		int competitor, column, csum, cidx;
 
-		for (acur = 0; acur < judgement.getCompetitors(); acur++) {
-			if (judgement.isSet(acur)) {
-				gone.add(acur);
+		for (competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+			if (judgement.isSet(competitor)) {
+				gone.add(competitor);
 			} else {
 				if (good.size() < gc) {
-					good.add(acur);
+					good.add(competitor);
 				} else {
-					bad.add(acur);
+					bad.add(competitor);
 				}
 			}
 		}
@@ -373,14 +369,14 @@ class MajorCalc {
 		for (column = 0; column < judgement.getCompetitors(); column++) {
 			csum = 0;
 
-			for (acur = 0; acur < judgement.getCompetitors(); acur++) {
-				if (!judgement.isSet(acur)) {
+			for (competitor = 0; competitor < judgement.getCompetitors(); competitor++) {
+				if (!judgement.isSet(competitor)) {
 					if (column == 0)
-						placeSums[acur][column] = 0;
+						placeSums[competitor][column] = 0;
 					else
-						placeSums[acur][column] = placeSums[acur][column - 1];
+						placeSums[competitor][column] = placeSums[competitor][column - 1];
 				}
-				csum += placeSums[acur][column];
+				csum += placeSums[competitor][column];
 			}
 
 			while (csum < (column + 1) * judgement.getJudges()) {
@@ -399,20 +395,20 @@ class MajorCalc {
 	}
 
 	int chooseOne(IntList which, int column, boolean dogood) {
-		int minp, mins, acur, cp, cs, res = -1;
+		int minp, mins, competitor, cp, cs, res = -1;
 
 		minp = judgement.getJudges() - 1;
 		mins = 0;
 
 		for (int i = 0; i < which.size(); i++) {
-			acur = which.get(i);
-			cp = placeSums[acur][column];
-			cs = getSum(acur, column, dogood);
+			competitor = which.get(i);
+			cp = placeSums[competitor][column];
+			cs = getSum(competitor, column, dogood);
 			if (cp < judgement.getJudges()) {
 				if (cp < minp || (cp == minp && cs > mins)) {
 					minp = cp;
 					mins = cs;
-					res = acur;
+					res = competitor;
 				}
 			}
 		}

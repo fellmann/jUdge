@@ -37,7 +37,13 @@ public class JudgementForFinal {
 	
 	public boolean isSet(int dance, int competitor)
 	{
-		// TODO check in judgement
+		for(int j=0;j<judges;j++)
+		{
+			if(judgements[dance][competitor][j] < 1)
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 }

@@ -14,11 +14,24 @@ public class SkatingTest {
 		SkatingCalc test = new SkatingCalc();
 		test.set(createJudgmentFromString("22525,33636,45311,11253,66144,54462;12234,31313,25555,44441,66666,53122;11111,23456,34562,45623,52234,66345;33136,11252,45441,56323,22515,64664;26261,44636,15152,63345,51514,32423,"
 				, 5, 6, 5));
-
 		test.calc();
 		
 		assertResultFromString(test, "2,1,1,3,2;4,3,4,1,6;3,5,4,5,1;1,4,4,4,5;5,6,2,2,4;6,2,6,6,3");
-
+	}
+	
+	@Test
+	public void testBeispielP_parts() {
+		SkatingCalc test = new SkatingCalc();
+		test.set(createJudgmentFromString("22525,33636,45311,11253,00000,00000"
+				, 1, 6, 5));
+		test.calc();
+		
+		for(int i=0;i<6;i++)
+		{
+			System.out.println(test.getMajorFunc()[0].getMinPlace(i) + " - " + test.getMajorFunc()[0].getMaxPlace(i));
+		}
+		
+		assertResultFromString(test, "2;4;3;1;0;0");
 	}
 
 	private void assertResultFromString(SkatingCalc test, String result) {
