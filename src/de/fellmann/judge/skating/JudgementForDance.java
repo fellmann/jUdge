@@ -1,7 +1,7 @@
 package de.fellmann.judge.skating;
 
 
-public class JudgementForDance implements JudgementForMajor {
+class JudgementForDance implements JudgementForMajor {
 	private final JudgementForFinal judgement;
 	private final int dance;
 	

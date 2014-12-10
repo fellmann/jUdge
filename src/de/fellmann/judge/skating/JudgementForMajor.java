@@ -1,6 +1,6 @@
 package de.fellmann.judge.skating;
 
-public interface JudgementForMajor {
+interface JudgementForMajor {
 	public abstract int getCompetitors();
 
 	public abstract int getDances();

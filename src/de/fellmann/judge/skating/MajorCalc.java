@@ -8,7 +8,7 @@ import de.fellmann.common.IntList;
  * @author Hanno Fellmann
  *
  */
-public class MajorCalc {
+class MajorCalc {
 	private JudgementForMajor judgement = null;
 	private double[][] tabelle1;
 	private double[][] tabelle2;

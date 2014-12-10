@@ -85,45 +85,45 @@ public class SkatingCalc {
 
 	}
 
-	void getUnter(int gesuchterPlatz, IntList which) {
+	void getUnter(int wantedPlace, IntList which) {
 
-		int gesuchterPlatzweg;
+		int wantedPlaceweg;
 
 		IntList curmaj, curSums = new IntList();
 
-		curmaj = getMaxCount(gesuchterPlatz, which);
+		curmaj = getMaxCount(wantedPlace, which);
 
 		if (curmaj.size() == 1) {
-			gesuchterPlatzweg = curmaj.get(0);
-			platz[gesuchterPlatzweg] = new Place(gesuchterPlatz);
-			which.remove(gesuchterPlatzweg);
+			wantedPlaceweg = curmaj.get(0);
+			platz[wantedPlaceweg] = new Place(wantedPlace);
+			which.remove(wantedPlaceweg);
 
 			if (which.size() > 0) {
-				getUnter(gesuchterPlatz + 1, which.byval());
+				getUnter(wantedPlace + 1, which.byval());
 			}
 		} else {
 			which.removeAll(curmaj);
 
-			curSums = getSums(curmaj, gesuchterPlatz);
+			curSums = getSums(curmaj, wantedPlace);
 			while (curSums.size() > 0) {
 				if (curSums.size() == 1) {
-					gesuchterPlatzweg = curSums.get(0);
-					platz[gesuchterPlatzweg] = new Place(gesuchterPlatz);
-					curmaj.remove(gesuchterPlatzweg);
+					wantedPlaceweg = curSums.get(0);
+					platz[wantedPlaceweg] = new Place(wantedPlace);
+					curmaj.remove(wantedPlaceweg);
 
 					if (curmaj.size() > 0) {
-						getUnter(gesuchterPlatz + 1, curmaj.byval());
+						getUnter(wantedPlace + 1, curmaj.byval());
 					}
 				} else {
-					getSkating(gesuchterPlatz, curSums.byval());
+					getSkating(wantedPlace, curSums.byval());
 					curmaj.removeAll(curSums);
 				}
-				gesuchterPlatz += curSums.size();
-				curSums = getSums(curmaj, gesuchterPlatz);
+				wantedPlace += curSums.size();
+				curSums = getSums(curmaj, wantedPlace);
 			}
 
 			if (which.size() > 0) {
-				getUnter(gesuchterPlatz, which.byval());
+				getUnter(wantedPlace, which.byval());
 			}
 		}
 	}
@@ -260,8 +260,8 @@ public class SkatingCalc {
 
 		IntList curmaj;
 
-		int gesuchterPlatz = 1;
-		int gesuchterPlatzweg;
+		int wantedPlace = 1;
+		int wantedPlaceweg;
 
 		didSkating10 = false;
 		didSkating11 = false;
@@ -285,33 +285,33 @@ public class SkatingCalc {
 			dancesCalc[d] = maj;
 		}
 
-		while (gesuchterPlatz < judgement.getCompetitors() + 1) {
+		while (wantedPlace < judgement.getCompetitors() + 1) {
 			curmaj = getMinSums(all);
 			// Genau eine Summe
 			if (curmaj.size() == 1) {
-				gesuchterPlatzweg = curmaj.get(0);
+				wantedPlaceweg = curmaj.get(0);
 
-				platz[gesuchterPlatzweg] = new Place(gesuchterPlatz);
-				all.remove(gesuchterPlatzweg);
+				platz[wantedPlaceweg] = new Place(wantedPlace);
+				all.remove(wantedPlaceweg);
 			}
 
 			// Mehrere Summen
 			else {
 				if (doSkating) {
 					didSkating10 = true;
-					getUnter(gesuchterPlatz, curmaj.byval());
+					getUnter(wantedPlace, curmaj.byval());
 					all.removeAll(curmaj);
 				} else {
 					for (i = 0; i < curmaj.size(); i++) {
-						gesuchterPlatzweg = curmaj.get(i);
-						platz[gesuchterPlatzweg] = new Place(gesuchterPlatz,
-								gesuchterPlatz + curmaj.size() - 1);
+						wantedPlaceweg = curmaj.get(i);
+						platz[wantedPlaceweg] = new Place(wantedPlace,
+								wantedPlace + curmaj.size() - 1);
 					}
 					all.removeAll(curmaj);
 				}
 			}
 
-			gesuchterPlatz += curmaj.size();
+			wantedPlace += curmaj.size();
 		}
 	}
 
