@@ -74,12 +74,12 @@ public class Calculator
 
 	/**
 	 * Returns the majority calculation table
-	 * 
+	 *
 	 * @param dance
 	 * @param x
-	 *            The table column, 0 < x < competitors
+	 *            The table column, 0 &lt; x &lt; competitors
 	 * @param y
-	 *            The table row, 0 < x < competitors
+	 *            The table row, 0 &lt; x &lt; competitors
 	 * @return
 	 */
 	public TableEntry getMajorTable(int dance, int x, int y)
@@ -135,11 +135,11 @@ public class Calculator
 
 	/**
 	 * Returns the calculation table for Skating rule 10
-	 * 
+	 *
 	 * @param x
-	 *            The table column, 0 < x < competitors
+	 *            The table column, 0 &lt; x &lt; competitors
 	 * @param y
-	 *            The table row, 0 < x < competitors
+	 *            The table row, 0 &lt; x &lt; competitors
 	 */
 	public TableEntry getTable10(int x, int y)
 	{
@@ -148,11 +148,11 @@ public class Calculator
 
 	/**
 	 * Returns the calculation table for Skating rule 11
-	 * 
+	 *
 	 * @param x
-	 *            The table column, 0 < x < competitors
+	 *            The table column, 0 &lt; x &lt; competitors
 	 * @param y
-	 *            The table row, 0 < x < competitors
+	 *            The table row, 0 &lt; x &lt; competitors
 	 */
 	public TableEntry getTable11(int x, int y)
 	{
@@ -225,7 +225,7 @@ public class Calculator
 						{
 							wantedPlaceweg = curmaj.get(i);
 							result[wantedPlaceweg] = new Place(wantedPlace,
-									wantedPlace + curmaj.size() - 1);
+							        wantedPlace + curmaj.size() - 1);
 						}
 						all.removeAll(curmaj);
 					}
