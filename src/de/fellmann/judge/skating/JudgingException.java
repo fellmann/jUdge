@@ -23,16 +23,12 @@
 
 package de.fellmann.judge.skating;
 
-interface JudgementForMajor
+public class JudgingException extends RuntimeException
 {
-	public abstract int getCompetitors();
+	private static final long serialVersionUID = 1l;
 
-	public abstract int getDances();
-
-	public abstract int getJudges();
-
-	public abstract boolean isSet(int competitor);
-
-	public abstract byte getJudgement(int competitor, int judge);
-
+	public JudgingException(String message)
+	{
+		super(message);
+	}
 }
