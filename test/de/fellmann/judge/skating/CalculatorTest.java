@@ -46,7 +46,7 @@ public class CalculatorTest
 	public void testBeispielB()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
+				createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_B_RESULT);
 	}
@@ -55,13 +55,13 @@ public class CalculatorTest
 	public void testBeispielP()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
+				createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
 
 		final String html = new ExportHtml(test).getHTML("12pt");
 		try
 		{
 			final FileOutputStream fos = new FileOutputStream(
-					"X:\\temp\\out.html");
+			        "X:\\temp\\out.html");
 			fos.write(html.getBytes());
 			fos.close();
 		}
@@ -77,7 +77,7 @@ public class CalculatorTest
 	public void testBeispielP_parts()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
+				createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
 		for (int c = 0; c < 6; c++)
 		{
 			for (int j = 0; j < 5; j++)
@@ -104,8 +104,8 @@ public class CalculatorTest
 				}
 				else
 				{
-					assertTrue(Double.valueOf(resultForDance[dance]) >= test.getMinResult(dance, competitor).getValue() - 0.01);
-					assertTrue(Double.valueOf(resultForDance[dance]) <= test.getMaxResult(dance, competitor).getValue() + 0.01);
+					assertTrue(Double.valueOf(resultForDance[dance]) >= test.getPossibleResult(dance, competitor).getMinPlace().getValue() - 0.01);
+					assertTrue(Double.valueOf(resultForDance[dance]) <= test.getPossibleResult(dance, competitor).getMaxPlace().getValue() + 0.01);
 				}
 			}
 		}
@@ -136,7 +136,7 @@ public class CalculatorTest
 		final String[] judgmentsForDance = gradesString.split(";");
 
 		final JudgementForFinal jff = new JudgementForFinal(dances,
-		        competitors, judges);
+				competitors, judges);
 
 		for (int d = 0; d < judgmentsForDance.length; d++)
 		{
@@ -147,7 +147,7 @@ public class CalculatorTest
 				for (int j = 0; j < judgmentsForCompetitor[j].length(); j++)
 				{
 					if (judgmentsForCompetitor[i].charAt(j) > '0'
-					        && judgmentsForCompetitor[i].charAt(j) < '9')
+					&& judgmentsForCompetitor[i].charAt(j) < '9')
 					{
 						jff.setMark(d, i, j, (byte) (judgmentsForCompetitor[i].charAt(j) - '0'));
 					}

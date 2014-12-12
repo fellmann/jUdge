@@ -25,6 +25,7 @@ package de.fellmann.judge.skating;
 
 import de.fellmann.common.IntList;
 import de.fellmann.judge.Place;
+import de.fellmann.judge.PossiblePlace;
 
 /**
  * Majority Calculation Module Judgment System 1.0
@@ -144,19 +145,21 @@ class CalcMajor
 
 	}
 
-	public Place getMaxResult(int i)
+	public Place getResult(int competitor)
 	{
-		return maxPlace[i];
+		return result[competitor];
 	}
 
-	public Place getMinResult(int i)
+	public PossiblePlace getPossibleResult(int competitor)
 	{
-		return minPlace[i];
-	}
-
-	public Place getResult(int i)
-	{
-		return result[i];
+		if (result[competitor] == null)
+		{
+			return new PossiblePlace(minPlace[competitor], maxPlace[competitor]);
+		}
+		else
+		{
+			return new PossiblePlace(result[competitor], result[competitor]);
+		}
 	}
 
 	public byte getCountPlaces(int x, int y)
@@ -274,7 +277,7 @@ class CalcMajor
 				{
 					gesuchterPlatzweg = curSums.get(0);
 					result[gesuchterPlatzweg] = new Place(wantedPlace,
-					        wantedPlace);
+							wantedPlace);
 					calculatedCount++;
 					curmaj.remove(gesuchterPlatzweg);
 
@@ -296,7 +299,7 @@ class CalcMajor
 						{
 							x = curSums.get(ix);
 							result[x] = new Place(wantedPlace, wantedPlace
-							        + curSums.size() - 1);
+									+ curSums.size() - 1);
 							calculatedCount++;
 						}
 						curmaj.removeAll(curSums);
@@ -349,13 +352,13 @@ class CalcMajor
 			if (which.contains(competitor))
 			{
 				if ((!calcOne || calculatedCount < 1)
-				        && column < judgement.getCompetitors())
+						&& column < judgement.getCompetitors())
 				{
 					table1[competitor][column] = getCountPlaces(competitor, column);
 				}
 
 				if (getCountPlaces(competitor, column) >= majorit
-				        && getCountPlaces(competitor, column) > max)
+						&& getCountPlaces(competitor, column) > max)
 				{
 					max = getCountPlaces(competitor, column);
 					res.clear();
@@ -478,7 +481,7 @@ class CalcMajor
 			for (int i = 1; i <= column; i++)
 			{
 				res += (getCountPlaces(x, i) - getCountPlaces(x, i - 1))
-				        * (i + 1);
+						* (i + 1);
 			}
 		}
 		else
@@ -487,7 +490,7 @@ class CalcMajor
 			for (int i = judgement.getCompetitors() - 2; i >= column; i++)
 			{
 				res += (getCountPlaces(x, i + 1) - getCountPlaces(x, i - 11))
-				        * (i + 1);
+						* (i + 1);
 			}
 		}
 
@@ -506,7 +509,7 @@ class CalcMajor
 			x = remaining.get(ix);
 			cur = getSum(x, column);
 			if ((!calcOne || calculatedCount < 1)
-			        && column < judgement.getCompetitors())
+					&& column < judgement.getCompetitors())
 			{
 				table2[x][column] = (byte) cur;
 			}

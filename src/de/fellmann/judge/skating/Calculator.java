@@ -25,6 +25,7 @@ package de.fellmann.judge.skating;
 
 import de.fellmann.common.IntList;
 import de.fellmann.judge.Place;
+import de.fellmann.judge.PossiblePlace;
 
 public class Calculator
 {
@@ -87,23 +88,11 @@ public class Calculator
 		return dancesCalc[dance].getTable(x, y);
 	}
 
-	public Place getMaxResult(int dance, int competitor)
+	public PossiblePlace getPossibleResult(int dance, int competitor)
 	{
 		if (dancesCalc[dance] != null)
 		{
-			return dancesCalc[dance].getMaxResult(competitor);
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public Place getMinResult(int dance, int competitor)
-	{
-		if (dancesCalc[dance] != null)
-		{
-			return dancesCalc[dance].getMinResult(competitor);
+			return dancesCalc[dance].getPossibleResult(competitor);
 		}
 		else
 		{
@@ -225,7 +214,7 @@ public class Calculator
 						{
 							wantedPlaceweg = curmaj.get(i);
 							result[wantedPlaceweg] = new Place(wantedPlace,
-							        wantedPlace + curmaj.size() - 1);
+									wantedPlace + curmaj.size() - 1);
 						}
 						all.removeAll(curmaj);
 					}
