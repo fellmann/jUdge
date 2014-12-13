@@ -27,6 +27,12 @@ import de.fellmann.common.IntList;
 import de.fellmann.judge.Place;
 import de.fellmann.judge.ResultRange;
 
+/**
+ * Implementation of Skating calculation.
+ *
+ * @author Hanno Fellmann
+ *
+ */
 public class Calculator
 {
 	private final JudgementForFinal judgement;
