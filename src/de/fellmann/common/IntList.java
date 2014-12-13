@@ -94,17 +94,35 @@ public class IntList
 		return source.size();
 	}
 
+	/**
+	 * Remove by value.
+	 *
+	 * @param x
+	 *            The value.
+	 */
 	public void remove(int x)
 	{
 		final int i = indexOf(x);
 		source.remove(i);
 	}
 
+	/**
+	 * Remove by index.
+	 *
+	 * @param i
+	 *            The index.
+	 */
 	public void removeIndex(int i)
 	{
 		source.remove(i);
 	}
 
+	/**
+	 * Remove all items from another list
+	 * 
+	 * @param v
+	 *            The other list.
+	 */
 	public void removeAll(IntList v)
 	{
 		for (int i = 0; i < v.size(); i++)

@@ -23,7 +23,7 @@
 
 package de.fellmann.judge.judgingsystem20;
 
-import de.fellmann.judge.skating.JudgingException;
+import de.fellmann.judge.exceptions.JudgingException;
 
 public class Calculator
 {

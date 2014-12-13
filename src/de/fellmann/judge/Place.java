@@ -25,16 +25,56 @@ package de.fellmann.judge;
 
 import java.text.DecimalFormat;
 
+/**
+ * Representation of a result place.
+ * <p>
+ * This class represents a place as result of a calculation. Either the place is
+ * exact, or places can be shared between competitors. In this case, the place
+ * range is used.
+ *
+ * @author Hanno Fellmann
+ *
+ */
 public class Place
 {
 	private final int placefrom, placeto;
 
 	private static final DecimalFormat df = new DecimalFormat("#.#");
 
+	/**
+	 * Create a new Place.
+	 *
+	 * @param exactPlace
+	 *            The exact, not shared place.
+	 */
+	public Place(int exactPlace)
+	{
+		placefrom = exactPlace;
+		placeto = exactPlace;
+	}
+
+	/**
+	 * Create a new Place.
+	 *
+	 * @param from
+	 *            Lower shared place.
+	 * @param to
+	 *            Higher shared place.
+	 */
 	public Place(int from, int to)
 	{
 		placefrom = from;
 		placeto = to;
+	}
+
+	/**
+	 * Determines if a place is shared.
+	 *
+	 * @return True, if the place is shared.
+	 */
+	public boolean isShared()
+	{
+		return placefrom != placeto;
 	}
 
 	@Override
@@ -74,23 +114,49 @@ public class Place
 		return true;
 	}
 
-	public Place(int exactPlace)
-	{
-		placefrom = exactPlace;
-		placeto = exactPlace;
-	}
-
+	/**
+	 * Returns the decimal value of this place.
+	 * <p>
+	 * If not shared, it equals the exact place. If shared, it equals the mean
+	 * value of the lower and upper range.
+	 * <p>
+	 * For example: <br>
+	 * 2.-3. place = 2.5 <br>
+	 * 1.-3. place = 2
+	 *
+	 * @return
+	 */
 	public double getValue()
 	{
-		return (placefrom + placeto) / 2.;
+		if (isShared())
+		{
+			return (placefrom + placeto) / 2.;
+		}
+		else
+		{
+			return placefrom;
+		}
 	}
 
+	/**
+	 * Returns the String representation of this place ({@link getValue}) as
+	 * decimal value, formatted "#.#".
+	 *
+	 * @see getValue
+	 */
 	@Override
 	public String toString()
 	{
 		return df.format(getValue());
 	}
 
+	/**
+	 * Returns the representation of this place with the range.
+	 * <p>
+	 * Example: <br>
+	 * Exact place: "2"<br>
+	 * Shared place: "2-3"
+	 */
 	public String toStringFromTo()
 	{
 		if (placefrom != placeto)
@@ -103,6 +169,13 @@ public class Place
 		}
 	}
 
+	/**
+	 * Returns the representation of this place with the range and a point.
+	 * <p>
+	 * Example: <br>
+	 * Exact place: "2."<br>
+	 * Shared place: "2.-3."
+	 */
 	public String toStringFromToPoint()
 	{
 		if (placefrom != placeto)
@@ -115,11 +188,17 @@ public class Place
 		}
 	}
 
+	/**
+	 * Get the lower place range.
+	 */
 	public int getPlaceFrom()
 	{
 		return placefrom;
 	}
 
+	/**
+	 * Get the higher place range.
+	 */
 	public int getPlaceTo()
 	{
 		return placeto;

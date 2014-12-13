@@ -21,26 +21,11 @@
  *
  */
 
-package de.fellmann.judge;
+/**
+ * Classes for common usage.
+ *
+ * @author Hanno Fellmann
+ */
 
-public class PossiblePlace
-{
-	private final Place minPlace, maxPlace;
+package de.fellmann.common;
 
-	public PossiblePlace(Place minPlace, Place maxPlace)
-	{
-		this.minPlace = minPlace;
-		this.maxPlace = maxPlace;
-	}
-
-	public Place getMinPlace()
-	{
-		return minPlace;
-	}
-
-	public Place getMaxPlace()
-	{
-		return maxPlace;
-	}
-
-}

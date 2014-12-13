@@ -25,44 +25,54 @@ package de.fellmann.judge.skating;
 
 import de.fellmann.common.IntList;
 import de.fellmann.judge.Place;
-import de.fellmann.judge.PossiblePlace;
+import de.fellmann.judge.ResultRange;
 
 public class Calculator
 {
 	private final JudgementForFinal judgement;
 
-	private CalcMajor dancesCalc[];
-	private CalcMajor skatingCalc;
+	private CalcMajority dancesCalc[];
+	private CalcMajority skatingCalc;
 
 	private Place result[];
-	private int platzierungen[][];
-	private double tabelle1[][];
-	private double tabelle2[][];
+	private double table10_val1[][];
+	private double table10_val2[][];
 	private double summe[];
 	private boolean doSkating = true;
 
 	private boolean appliedSkating10 = false;
 	private boolean appliedSkating11 = false;
 
+	/**
+	 * Create new calculator and calculate results.
+	 *
+	 * @param judgement
+	 *            The judgement data.
+	 */
 	public Calculator(JudgementForFinal judgement)
 	{
 		this.judgement = judgement;
 		recalculate();
 	}
 
+	/**
+	 * Determine if Skating rule 10 was used.
+	 *
+	 * @return True, if rule 10 was applied.
+	 */
 	public boolean getAppliedSkating10()
 	{
 		return appliedSkating10;
 	}
 
+	/**
+	 * Determine if Skating rule 11 was used.
+	 *
+	 * @return True, if rule 11 was applied.
+	 */
 	public boolean getAppliedSkating11()
 	{
 		return appliedSkating11;
-	}
-
-	public int getCountPlace(int x, int y)
-	{
-		return platzierungen[x][y];
 	}
 
 	/**
@@ -88,7 +98,19 @@ public class Calculator
 		return dancesCalc[dance].getTable(x, y);
 	}
 
-	public PossiblePlace getPossibleResult(int dance, int competitor)
+	/**
+	 * Returns the possible result for a competitor in a specific dance.
+	 * <p>
+	 * If the input is not set for the competitor, the range of all results
+	 * still possible is beeing calculated.
+	 *
+	 * @param dance
+	 *            Index of the dance.
+	 * @param competitor
+	 *            Index of the competitor.
+	 * @return The range of possible results.
+	 */
+	public ResultRange getPossibleResult(int dance, int competitor)
 	{
 		if (dancesCalc[dance] != null)
 		{
@@ -100,11 +122,25 @@ public class Calculator
 		}
 	}
 
+	/**
+	 * Get the final result for a competitor.
+	 *
+	 * @param competitor
+	 *            Index of the competitor.
+	 * @return The place, or null if judgement not set.
+	 */
 	public Place getResult(int competitor)
 	{
 		return result[competitor];
 	}
 
+	/**
+	 * Get the result in a specific for a competitor.
+	 *
+	 * @param competitor
+	 *            Index of the competitor.
+	 * @return The place, or null if judgement not set.
+	 */
 	public Place getResult(int dance, int competitor)
 	{
 		if (dancesCalc[dance] != null)
@@ -117,6 +153,13 @@ public class Calculator
 		}
 	}
 
+	/**
+	 * Returns the sum over all dances for one competitor.
+	 *
+	 * @param competitor
+	 *            Index of the competitor.
+	 * @return The sum of all completed dances.
+	 */
 	public double getSum(int competitor)
 	{
 		return summe[competitor];
@@ -132,7 +175,7 @@ public class Calculator
 	 */
 	public TableEntry getTable10(int x, int y)
 	{
-		return new TableEntry(tabelle1[x][y], tabelle2[x][y]);
+		return new TableEntry(table10_val1[x][y], table10_val2[x][y]);
 	}
 
 	/**
@@ -148,6 +191,11 @@ public class Calculator
 		return skatingCalc.getTable(x, y);
 	}
 
+	/**
+	 * Manually recalculate results
+	 * <p>
+	 * (for example after change of input data)
+	 */
 	public void recalculate()
 	{
 		init();
@@ -172,23 +220,24 @@ public class Calculator
 		{
 			for (j = 0; j < judgement.getCompetitors(); j++)
 			{
-				tabelle1[i][j] = -1;
-				tabelle2[i][j] = -1;
+				table10_val1[i][j] = -1;
+				table10_val2[i][j] = -1;
 			}
 		}
 
-		skatingCalc = new CalcMajor(new JudgementForSkating(judgement));
+		skatingCalc = new CalcMajority(new JudgementForSkating(judgement));
 
 		for (int d = 0; d < judgement.getDances(); d++)
 		{
-			dancesCalc[d] = new CalcMajor(new JudgementForDance(judgement, d));
+			dancesCalc[d] = new CalcMajority(
+			        new JudgementForDance(judgement, d));
 		}
 
 		if (judgement.isValid())
 		{
 			while (wantedPlace < judgement.getCompetitors() + 1)
 			{
-				curmaj = getMinSums(all);
+				curmaj = getByDanceSum(all);
 
 				// Exactly one competitor
 				if (curmaj.size() == 1)
@@ -205,7 +254,7 @@ public class Calculator
 					if (doSkating)
 					{
 						appliedSkating10 = true;
-						getUnter(wantedPlace, curmaj.byval());
+						calcRecursive(wantedPlace, curmaj.byval());
 						all.removeAll(curmaj);
 					}
 					else
@@ -214,7 +263,7 @@ public class Calculator
 						{
 							wantedPlaceweg = curmaj.get(i);
 							result[wantedPlaceweg] = new Place(wantedPlace,
-									wantedPlace + curmaj.size() - 1);
+							        wantedPlace + curmaj.size() - 1);
 						}
 						all.removeAll(curmaj);
 					}
@@ -236,7 +285,127 @@ public class Calculator
 		this.doSkating = doSkating;
 	}
 
-	private IntList getMaxCount(int aidx, IntList which)
+	private void calcRecursive(int wantedPlace, IntList which)
+	{
+
+		int wantedPlaceweg;
+
+		IntList curmaj, curSums = new IntList();
+
+		curmaj = getByPlaceCount(wantedPlace, which);
+
+		if (curmaj.size() == 1)
+		{
+			wantedPlaceweg = curmaj.get(0);
+			result[wantedPlaceweg] = new Place(wantedPlace);
+			which.remove(wantedPlaceweg);
+
+			if (which.size() > 0)
+			{
+				calcRecursive(wantedPlace + 1, which.byval());
+			}
+		}
+		else
+		{
+			which.removeAll(curmaj);
+
+			curSums = getByDigitSums(curmaj, wantedPlace);
+			while (curSums.size() > 0)
+			{
+				if (curSums.size() == 1)
+				{
+					wantedPlaceweg = curSums.get(0);
+					result[wantedPlaceweg] = new Place(wantedPlace);
+					curmaj.remove(wantedPlaceweg);
+
+					if (curmaj.size() > 0)
+					{
+						calcRecursive(wantedPlace + 1, curmaj.byval());
+					}
+				}
+				else
+				{
+					getSkating(wantedPlace, curSums.byval());
+					curmaj.removeAll(curSums);
+				}
+				wantedPlace += curSums.size();
+				curSums = getByDigitSums(curmaj, wantedPlace);
+			}
+
+			if (which.size() > 0)
+			{
+				calcRecursive(wantedPlace, which.byval());
+			}
+		}
+	}
+
+	private IntList getByDanceSum(IntList remaining)
+	{
+		final IntList res = new IntList();
+		double max = Double.MAX_VALUE;
+		double cur;
+		int competitor;
+
+		for (int ix = 0; ix < remaining.size(); ix++)
+		{
+			competitor = remaining.get(ix);
+			cur = dancesCalc[0].getResult(competitor).getValue();
+			for (int i = 1; i < judgement.getDances(); i++)
+			{
+				cur += dancesCalc[i].getResult(competitor).getValue();
+			}
+			summe[competitor] = cur;
+			if (cur < max)
+			{
+				max = cur;
+				res.clear();
+				res.add(competitor);
+			}
+			else if (cur == max)
+			{
+				res.add(competitor);
+			}
+		}
+
+		return res;
+	}
+
+	private IntList getByDigitSums(IntList which, int aidx)
+	{
+		final IntList res = new IntList();
+		double max = Double.MAX_VALUE;
+		double cur;
+
+		for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++)
+		{
+			if (which.contains(competitor))
+			{
+				cur = 0;
+				for (int i = 0; i < judgement.getDances(); i++)
+				{
+					if (dancesCalc[i].getResult(competitor).getValue() <= aidx)
+					{
+						cur += dancesCalc[i].getResult(competitor).getValue();
+					}
+				}
+				table10_val2[competitor][aidx - 1] = cur;
+				if (cur < max)
+				{
+					max = cur;
+					res.clear();
+					res.add(competitor);
+				}
+				else if (max == cur)
+				{
+					res.add(competitor);
+				}
+			}
+		}
+
+		return res;
+	}
+
+	private IntList getByPlaceCount(int aidx, IntList which)
 	{
 		final IntList res = new IntList();
 		int max = -1;
@@ -259,7 +428,7 @@ public class Calculator
 						cur++;
 					}
 				}
-				tabelle1[competitor][aidx - 1] = cur;
+				table10_val1[competitor][aidx - 1] = cur;
 				if (cur > max)
 				{
 					max = cur;
@@ -276,7 +445,7 @@ public class Calculator
 		return res;
 	}
 
-	private IntList getMaxSkatingPlatz(IntList remaining)
+	private IntList getByPlaceRule11(IntList remaining)
 	{
 		double maxP = 20000;
 		int x;
@@ -297,66 +466,6 @@ public class Calculator
 		return v;
 	}
 
-	// private void countPlaces()
-	// {
-	// for (int aidx = 0; aidx < judgement.getDances(); aidx++)
-	// {
-	// for (int competitor = 0; competitor < judgement.getCompetitors();
-	// competitor++)
-	// {
-	// platzierungen[competitor][aidx] = 0;
-	// for (int judge = 0; judge < judgement.getJudges(); judge++)
-	// {
-	// if (aidx + 1 >= judgement.getMark(aidx, competitor, judge))
-	// {
-	// platzierungen[competitor][aidx]++;
-	// }
-	// }
-	// }
-	// }
-	//
-	// for (int i = 0; i < judgement.getDances(); i++)
-	// {
-	// for (int j = 0; j < judgement.getCompetitors(); j++)
-	// {
-	// tabelle1[i][j] = -1;
-	// tabelle2[i][j] = -1;
-	// }
-	// }
-	// }
-
-	private IntList getMinSums(IntList remaining)
-	{
-		final IntList res = new IntList();
-		double max = 9999;
-		double cur;
-		int competitor;
-
-		for (int ix = 0; ix < remaining.size(); ix++)
-		{
-			competitor = remaining.get(ix);
-			cur = dancesCalc[0].getResult(competitor).getValue();
-			for (int i = 1; i < judgement.getDances(); i++)
-			{
-				cur += dancesCalc[i].getResult(competitor).getValue();
-			}
-			summe[competitor] = cur;
-			// varTabelle2[x][aidx]=cur;
-			if (cur < max)
-			{
-				max = cur;
-				res.clear();
-				res.add(competitor);
-			}
-			else if (cur == max)
-			{
-				res.add(competitor);
-			}
-		}
-
-		return res;
-	}
-
 	private void getSkating(int wantedPlace, IntList remaining)
 	{
 		int competitor;
@@ -364,10 +473,9 @@ public class Calculator
 
 		appliedSkating11 = true;
 
-		skatingCalc.setSkating();
-		skatingCalc.countPlaces(wantedPlace - 1, wantedPlace, remaining.byval());
+		skatingCalc.getForSkating(wantedPlace - 1, wantedPlace, remaining.byval());
 
-		killed = getMaxSkatingPlatz(remaining);
+		killed = getByPlaceRule11(remaining);
 
 		for (int ix = 0; ix < killed.size(); ix++)
 		{
@@ -378,7 +486,7 @@ public class Calculator
 		remaining.removeAll(killed);
 		if (remaining.size() > 1)
 		{
-			getUnter(wantedPlace + killed.size(), remaining.byval());
+			calcRecursive(wantedPlace + killed.size(), remaining.byval());
 		}
 		else if (remaining.size() == 1)
 		{
@@ -387,102 +495,14 @@ public class Calculator
 
 	}
 
-	private IntList getSums(IntList which, int aidx)
-	{
-		final IntList res = new IntList();
-		double max = 999999;
-		double cur;
-
-		for (int competitor = 0; competitor < judgement.getCompetitors(); competitor++)
-		{
-			if (which.contains(competitor))
-			{
-				cur = 0;
-				for (int i = 0; i < judgement.getDances(); i++)
-				{
-					if (dancesCalc[i].getResult(competitor).getValue() <= aidx)
-					{
-						cur += dancesCalc[i].getResult(competitor).getValue();
-					}
-				}
-				tabelle2[competitor][aidx - 1] = cur;
-				if (cur < max)
-				{
-					max = cur;
-					res.clear();
-					res.add(competitor);
-				}
-				else if (max == cur)
-				{
-					res.add(competitor);
-				}
-			}
-		}
-
-		return res;
-	}
-
-	private void getUnter(int wantedPlace, IntList which)
-	{
-
-		int wantedPlaceweg;
-
-		IntList curmaj, curSums = new IntList();
-
-		curmaj = getMaxCount(wantedPlace, which);
-
-		if (curmaj.size() == 1)
-		{
-			wantedPlaceweg = curmaj.get(0);
-			result[wantedPlaceweg] = new Place(wantedPlace);
-			which.remove(wantedPlaceweg);
-
-			if (which.size() > 0)
-			{
-				getUnter(wantedPlace + 1, which.byval());
-			}
-		}
-		else
-		{
-			which.removeAll(curmaj);
-
-			curSums = getSums(curmaj, wantedPlace);
-			while (curSums.size() > 0)
-			{
-				if (curSums.size() == 1)
-				{
-					wantedPlaceweg = curSums.get(0);
-					result[wantedPlaceweg] = new Place(wantedPlace);
-					curmaj.remove(wantedPlaceweg);
-
-					if (curmaj.size() > 0)
-					{
-						getUnter(wantedPlace + 1, curmaj.byval());
-					}
-				}
-				else
-				{
-					getSkating(wantedPlace, curSums.byval());
-					curmaj.removeAll(curSums);
-				}
-				wantedPlace += curSums.size();
-				curSums = getSums(curmaj, wantedPlace);
-			}
-
-			if (which.size() > 0)
-			{
-				getUnter(wantedPlace, which.byval());
-			}
-		}
-	}
-
 	private void init()
 	{
-		dancesCalc = new CalcMajor[judgement.getDances()];
+		appliedSkating10 = false;
+		appliedSkating11 = false;
+		dancesCalc = new CalcMajority[judgement.getDances()];
 		result = new Place[judgement.getCompetitors()];
-		platzierungen = new int[judgement.getCompetitors()][judgement.getCompetitors()];
-		tabelle1 = new double[judgement.getCompetitors()][judgement.getCompetitors()];
-		tabelle2 = new double[judgement.getCompetitors()][judgement.getCompetitors()];
+		table10_val1 = new double[judgement.getCompetitors()][judgement.getCompetitors()];
+		table10_val2 = new double[judgement.getCompetitors()][judgement.getCompetitors()];
 		summe = new double[judgement.getCompetitors()];
 	}
 

@@ -21,14 +21,15 @@
  *
  */
 
-package de.fellmann.judge.skating;
+/**
+ * Calculation for WDSF judging system 2.0/2.1.
+ * <p>
+ * These classes contain the Calculator and Judgement data objects for WDSF judging system.
+ *
+ * @see de.fellmann.judge.judgingsystem20.JudgementForFinal
+ * @see de.fellmann.judge.judgingsystem20.Calculator
+ * @author Hanno Fellmann
+ */
 
-public class JudgingException extends RuntimeException
-{
-	private static final long serialVersionUID = 1l;
+package de.fellmann.judge.judgingsystem20;
 
-	public JudgingException(String message)
-	{
-		super(message);
-	}
-}

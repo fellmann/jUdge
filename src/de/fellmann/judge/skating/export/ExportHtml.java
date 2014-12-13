@@ -26,6 +26,11 @@ package de.fellmann.judge.skating.export;
 import de.fellmann.judge.skating.Calculator;
 import de.fellmann.judge.skating.JudgementForFinal;
 
+/**
+ * Demo for exporting Skating results to HTML
+ *
+ * @author Hanno Fellmann
+ */
 public class ExportHtml
 {
 	private final JudgementForFinal judgement;
@@ -71,9 +76,9 @@ public class ExportHtml
 			html.append("<td class=\"result\">" + idx + "&nbsp;</td>");
 
 			html.append("<td class=\"result\">" + "Participant " + idx
-			        + "&nbsp;</td>");
+					+ "&nbsp;</td>");
 			html.append("<td align=\"center\" class=\"result\">");
-			html.append(judgement.getAsString(dance, idx));
+			html.append(judgement.toString(dance, idx));
 			html.append("&nbsp;</td>");
 			for (int column = 0; column < judgement.getCompetitors(); column++)
 			{
@@ -150,7 +155,7 @@ public class ExportHtml
 				html.append("<td class=\"result\">" + idx + "&nbsp;</td>");
 
 				html.append("<td class=\"result\">" + "Participant " + idx
-				        + "&nbsp;</td>");
+						+ "&nbsp;</td>");
 				for (int i = 0; i < judgement.getDances(); i++)
 				{
 					html.append("<td align=\"center\" class=\"result\">");
@@ -161,10 +166,10 @@ public class ExportHtml
 					html.append("&nbsp;</td>");
 				}
 				html.append("<td align=\"center\" class=\"result\">&nbsp;"
-				        + calculator.getSum(idx) + "&nbsp;</td>");
+						+ calculator.getSum(idx) + "&nbsp;</td>");
 				html.append("<td align=\"center\" class=\"result\">&nbsp;"
-				        + calculator.getResult(idx).toStringFromTo()
-				        + "&nbsp;</td>");
+						+ calculator.getResult(idx).toStringFromTo()
+						+ "&nbsp;</td>");
 				html.append("</tr>");
 			}
 
@@ -203,7 +208,7 @@ public class ExportHtml
 				html.append("<td class=\"result\">" + idx + "&nbsp;</td>");
 
 				html.append("<td class=\"result\">" + "Participant " + idx
-				        + "&nbsp;</td>");
+						+ "&nbsp;</td>");
 				for (int t = 0; t < judgement.getCompetitors(); t++)
 				{
 					html.append("<td align=\"center\" class=\"result\">");
@@ -211,7 +216,7 @@ public class ExportHtml
 					html.append("&nbsp;</td>");
 				}
 				html.append("<td align=\"center\" class=\"result\">&nbsp;"
-				        + calculator.getResult(idx) + "&nbsp;</td>");
+						+ calculator.getResult(idx) + "&nbsp;</td>");
 				html.append("</tr>");
 			}
 			html.append("</table><br>");
@@ -249,7 +254,7 @@ public class ExportHtml
 				html.append("<td class=\"result\">" + idx + "&nbsp;</td>");
 
 				html.append("<td class=\"result\">" + "Participant " + idx
-				        + "&nbsp;</td>");
+						+ "&nbsp;</td>");
 				for (int t = 0; t < judgement.getCompetitors(); t++)
 				{
 					html.append("<td align=\"center\" class=\"result\">");
@@ -257,7 +262,7 @@ public class ExportHtml
 					html.append("&nbsp;</td>");
 				}
 				html.append("<td align=\"center\" class=\"result\">&nbsp;"
-				        + calculator.getResult(idx) + "&nbsp;</td>");
+						+ calculator.getResult(idx) + "&nbsp;</td>");
 				html.append("</tr>");
 			}
 
