@@ -44,7 +44,7 @@ public class ExportHtml
 
 	private void addDance(StringBuilder html, int dance)
 	{
-		html.append("<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\">");
+		html.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">");
 
 		html.append("<tr>");
 		html.append("<td class=\"resultheader\">Nr&nbsp;</td>");
@@ -102,7 +102,8 @@ public class ExportHtml
 	{
 		final StringBuilder html = new StringBuilder();
 
-		html.append("<html><head><title>" + "Result" + "</title></head><body>");
+		html.append("<html><head><title>" + "Result" + "</title><style>"
+		        + style + "</style></head><body>");
 
 		html.append("<b>" + "Result" + "</b><br><br>");
 
@@ -133,7 +134,7 @@ public class ExportHtml
 			// ++++++++++++++++++++++++++++
 
 			html.append("<b>Sums</b>");
-			html.append("<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\">");
+			html.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">");
 			html.append("<tr>");
 			html.append("<td class=\"resultheader\">Nr&nbsp;</td>");
 
@@ -180,7 +181,7 @@ public class ExportHtml
 			// ++++++++++++++++++++++++++++
 
 			html.append("<b>Skating Table 10</b>");
-			html.append("<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\">");
+			html.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">");
 			html.append("<tr>");
 			html.append("<td class=\"resultheader\">Nr&nbsp;</td>");
 
@@ -226,7 +227,7 @@ public class ExportHtml
 			// ++++++++++++++++++++++++++++
 
 			html.append("<b>Skating Table 11</b>");
-			html.append("<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\">");
+			html.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\">");
 			html.append("<tr>");
 			html.append("<td class=\"resultheader\">Nr&nbsp;</td>");
 
