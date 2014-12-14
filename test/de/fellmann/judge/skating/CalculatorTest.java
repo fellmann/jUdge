@@ -29,8 +29,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.fellmann.judge.skating.export.ExportHtml;
-
 public class CalculatorTest
 {
 	private static String BEISPIEL_B = "11144,32211,25522,43453,54335,66666";
@@ -56,7 +54,7 @@ public class CalculatorTest
 	public void testBeispielB()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
+		        createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_B_RESULT);
 	}
@@ -65,7 +63,7 @@ public class CalculatorTest
 	public void testBeispielP()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
+		        createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_P_RESULT);
 	}
@@ -74,9 +72,7 @@ public class CalculatorTest
 	public void testBeispielP_3Dances()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(BEISPIEL_P_INCOMPLETE_3DANCES, 5, 6, 5));
-
-		System.out.println(new ExportHtml(test).getHTML("10"));
+		        createJudgmentFromString(BEISPIEL_P_INCOMPLETE_3DANCES, 5, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_P_RESULT_3DANCES);
 	}
@@ -85,7 +81,7 @@ public class CalculatorTest
 	public void testBeispielEdgeCase1()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(EDGE_1, 1, 1, 1));
+		        createJudgmentFromString(EDGE_1, 1, 1, 1));
 
 		assertResultFromString(test, EDGE_1_RESULT);
 	}
@@ -94,7 +90,7 @@ public class CalculatorTest
 	public void testBeispielEdgeCase2()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(EDGE_2, 1, 2, 1));
+		        createJudgmentFromString(EDGE_2, 1, 2, 1));
 
 		assertResultFromString(test, EDGE_2_RESULT);
 	}
@@ -103,7 +99,7 @@ public class CalculatorTest
 	public void testBeispielEdgeCase3()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(EDGE_3, 1, 2, 1));
+		        createJudgmentFromString(EDGE_3, 1, 2, 1));
 
 		assertPreResultFromString(test, EDGE_3_INCOMPLETE);
 	}
@@ -112,7 +108,7 @@ public class CalculatorTest
 	public void testBeispielP_parts()
 	{
 		final Calculator test = new Calculator(
-				createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
+		        createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
 		for (int c = 0; c < 6; c++)
 		{
 			for (int j = 0; j < 5; j++)
@@ -175,7 +171,7 @@ public class CalculatorTest
 		final String[] judgmentsForDance = gradesString.split(";");
 
 		final JudgementForFinal jff = new JudgementForFinal(dances,
-				competitors, judges);
+		        competitors, judges);
 
 		for (int d = 0; d < judgmentsForDance.length; d++)
 		{
@@ -186,7 +182,7 @@ public class CalculatorTest
 				for (int j = 0; j < judgmentsForCompetitor[i].length(); j++)
 				{
 					if (judgmentsForCompetitor[i].charAt(j) > '0'
-					&& judgmentsForCompetitor[i].charAt(j) < '9')
+					        && judgmentsForCompetitor[i].charAt(j) < '9')
 					{
 						jff.setMark(d, i, j, (byte) (judgmentsForCompetitor[i].charAt(j) - '0'));
 					}
