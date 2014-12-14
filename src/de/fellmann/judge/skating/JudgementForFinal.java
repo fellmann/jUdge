@@ -23,7 +23,6 @@
 
 package de.fellmann.judge.skating;
 
-import de.fellmann.judge.exceptions.JudgingException;
 import de.fellmann.judge.exceptions.MarkOutOfRangeException;
 
 /**
@@ -127,7 +126,7 @@ public class JudgementForFinal
 		else
 		{
 			throw new MarkOutOfRangeException("Input " + value
-					+ " out of range!");
+			        + " out of range!");
 		}
 	}
 
@@ -293,10 +292,17 @@ public class JudgementForFinal
 
 	private void checkBounds(int dance, int competitor, int judge)
 	{
-		if (dance < 0 || competitor < 0 || judge < 0 || dance >= dances
-				|| competitor >= competitors || judge >= judges)
+		if (dance < 0 || dance >= dances)
 		{
-			throw new IndexOutOfBoundsException();
+			throw new MarkOutOfRangeException("Dance index out of range!");
+		}
+		else if (competitor < 0 || competitor >= competitors)
+		{
+			throw new MarkOutOfRangeException("Competitor index out of range!");
+		}
+		else if (judge < 0 || judge >= judges)
+		{
+			throw new MarkOutOfRangeException("Judge index out of range!");
 		}
 	}
 

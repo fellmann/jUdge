@@ -31,4 +31,8 @@ public class MarkOutOfRangeException extends RuntimeException
 	{
 		super(message);
 	}
+
+	public MarkOutOfRangeException()
+	{
+	}
 }

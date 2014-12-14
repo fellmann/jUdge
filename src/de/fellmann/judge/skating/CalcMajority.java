@@ -126,7 +126,7 @@ class CalcMajority
 				}
 			}
 
-			clearTableForUnset();
+			clearTablesForUnset();
 
 			for (competitor = 0; competitor < judgement.getCompetitors(); competitor++)
 			{
@@ -206,16 +206,17 @@ class CalcMajority
 		calculate(IntList.getFromTo(0, judgement.getCompetitors() - 1));
 	}
 
-	private void clearTableForUnset()
+	private void clearTablesForUnset()
 	{
-		for (int i = 0; i < judgement.getCompetitors(); i++)
+		for (int x = 0; x < judgement.getCompetitors(); x++)
 		{
-			for (int j = 0; j < judgement.getCompetitors(); j++)
+			if (!judgement.isSet(x))
 			{
-				if (!judgement.isSet(j))
+				for (int y = 0; y < judgement.getCompetitors(); y++)
 				{
-					table_val1[i][j] = -1;
-					table_val2[i][j] = -1;
+					table_val1[x][y] = -1;
+					table_val2[x][y] = -1;
+					countPlaces[x][y] = -1;
 				}
 			}
 		}
@@ -291,8 +292,7 @@ class CalcMajority
 				if (byDigitSum.size() == 1)
 				{
 					competitor = byDigitSum.get(0);
-					result[competitor] = new Place(wantedPlace,
-					        wantedPlace);
+					result[competitor] = new Place(wantedPlace, wantedPlace);
 					calculatedCount++;
 					byMaxMajority.remove(competitor);
 
@@ -417,6 +417,11 @@ class CalcMajority
 				else
 				{
 					cidx = distributePlace(bad, column, true);
+
+					if (cidx < 0)
+					{
+						cidx = 0;
+					}
 					countPlaces[cidx][column]++;
 				}
 				csum++;

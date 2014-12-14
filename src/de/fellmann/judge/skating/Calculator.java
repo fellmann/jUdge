@@ -26,6 +26,7 @@ package de.fellmann.judge.skating;
 import de.fellmann.common.IntList;
 import de.fellmann.judge.Place;
 import de.fellmann.judge.ResultRange;
+import de.fellmann.judge.exceptions.CalculationException;
 
 /**
  * Implementation of Skating calculation.
@@ -204,79 +205,86 @@ public class Calculator
 	 */
 	public void recalculate()
 	{
-		init();
-
-		final IntList all = new IntList();
-		int i, j;
-
-		for (i = 0; i < judgement.getCompetitors(); i++)
+		try
 		{
-			all.add(i);
-		}
+			init();
 
-		IntList curmaj;
+			final IntList all = new IntList();
+			int i, j;
 
-		int wantedPlace = 1;
-		int wantedPlaceweg;
-
-		appliedSkating10 = false;
-		appliedSkating11 = false;
-
-		for (i = 0; i < judgement.getCompetitors(); i++)
-		{
-			for (j = 0; j < judgement.getCompetitors(); j++)
+			for (i = 0; i < judgement.getCompetitors(); i++)
 			{
-				table10_val1[i][j] = -1;
-				table10_val2[i][j] = -1;
+				all.add(i);
 			}
-		}
 
-		skatingCalc = new CalcMajority(new JudgementForSkating(judgement));
+			IntList curmaj;
 
-		for (int d = 0; d < judgement.getDances(); d++)
-		{
-			dancesCalc[d] = new CalcMajority(
-			        new JudgementForDance(judgement, d));
-		}
+			int wantedPlace = 1;
+			int wantedPlaceweg;
 
-		if (judgement.isValid())
-		{
-			while (wantedPlace < judgement.getCompetitors() + 1)
+			appliedSkating10 = false;
+			appliedSkating11 = false;
+
+			for (i = 0; i < judgement.getCompetitors(); i++)
 			{
-				curmaj = getByDanceSum(all);
-
-				// Exactly one competitor
-				if (curmaj.size() == 1)
+				for (j = 0; j < judgement.getCompetitors(); j++)
 				{
-					wantedPlaceweg = curmaj.get(0);
-
-					result[wantedPlaceweg] = new Place(wantedPlace);
-					all.remove(wantedPlaceweg);
+					table10_val1[i][j] = -1;
+					table10_val2[i][j] = -1;
 				}
+			}
 
-				// More than one competitor share minimal sum
-				else
+			skatingCalc = new CalcMajority(new JudgementForSkating(judgement));
+
+			for (int d = 0; d < judgement.getDances(); d++)
+			{
+				dancesCalc[d] = new CalcMajority(new JudgementForDance(
+				        judgement, d));
+			}
+
+			if (judgement.isValid())
+			{
+				while (wantedPlace < judgement.getCompetitors() + 1)
 				{
-					if (doSkating)
+					curmaj = getByDanceSum(all);
+
+					// Exactly one competitor
+					if (curmaj.size() == 1)
 					{
-						appliedSkating10 = true;
-						calcRecursive(wantedPlace, curmaj.byval());
-						all.removeAll(curmaj);
+						wantedPlaceweg = curmaj.get(0);
+
+						result[wantedPlaceweg] = new Place(wantedPlace);
+						all.remove(wantedPlaceweg);
 					}
+
+					// More than one competitor share minimal sum
 					else
 					{
-						for (i = 0; i < curmaj.size(); i++)
+						if (doSkating)
 						{
-							wantedPlaceweg = curmaj.get(i);
-							result[wantedPlaceweg] = new Place(wantedPlace,
-							        wantedPlace + curmaj.size() - 1);
+							appliedSkating10 = true;
+							calcRecursive(wantedPlace, curmaj.byval());
+							all.removeAll(curmaj);
 						}
-						all.removeAll(curmaj);
+						else
+						{
+							for (i = 0; i < curmaj.size(); i++)
+							{
+								wantedPlaceweg = curmaj.get(i);
+								result[wantedPlaceweg] = new Place(wantedPlace,
+										wantedPlace + curmaj.size() - 1);
+							}
+							all.removeAll(curmaj);
+						}
 					}
-				}
 
-				wantedPlace += curmaj.size();
+					wantedPlace += curmaj.size();
+				}
 			}
+		}
+		catch (final RuntimeException re)
+		{
+			throw new CalculationException(re);
 		}
 	}
 

@@ -23,12 +23,12 @@
 
 package de.fellmann.judge.exceptions;
 
-public class JudgingException extends RuntimeException
+public class CalculationException extends RuntimeException
 {
 	private static final long serialVersionUID = 1l;
 
-	public JudgingException(String message)
+	public CalculationException(RuntimeException source)
 	{
-		super(message);
+		super(source);
 	}
 }
