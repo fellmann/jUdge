@@ -29,23 +29,34 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.fellmann.judge.skating.export.ExportHtml;
+
 public class CalculatorTest
 {
 	private static String BEISPIEL_B = "11144,32211,25522,43453,54335,66666";
 	private static String BEISPIEL_B_RESULT = "1;2;3;4;5;6;1,2,3,4,5,6";
 
-	private static String BEISPIEL_P = "22525,33636,45311,11253,66144,54462;12234,31313,25555,44441,66666,53122;11111,23456,34562,45623,52234,66345;33136,11252,45441,56323,22515,64664;26261,44636,15152,63345,51514,32423,";
-	private static String BEISPIEL_P_INCOMPLETE = "22525,33636,45311,11253,00000,00000;12204,31313,25055,44441,60066,53122;11111,00000,34562,45623,52234,66345;33136,11252,45441,56323,02505,64664;26261,40636,15102,63305,01514,30423,";
+	private static String BEISPIEL_P = "22525,33636,45311,11253,66144,54462;12234,31313,25555,44441,66666,53122;11111,23456,34562,45623,52234,66345;33136,11252,45441,56323,22515,64664;26261,44636,15152,63345,51514,32423";
+	private static String BEISPIEL_P_INCOMPLETE = "22525,33636,45311,11253,00000,00000;12204,31313,25055,44441,60066,53122;11111,00000,34562,45623,52234,66345;33136,11252,45441,56323,02505,64664;26261,40636,15102,63305,01514,30423";
 	private static String BEISPIEL_P_RESULT = "2,1,1,3,2;4,3,4,1,6;3,5,4,5,1;1,4,4,4,5;5,6,2,2,4;6,2,6,6,3;1,2,3,4,5,6";
-	
-	private static String BEISPIEL_E = "1";
-	private static String BEISPIEL_E_RESULT = "1";
+
+	private static String BEISPIEL_P_INCOMPLETE_3DANCES = "22525,33636,45311,11253,66144,54462;00000,00000,00000,00000,00000,00000;11111,23456,34562,45623,52234,66345;33136,11252,45441,56323,22515,64664;00000,00000,00000,00000,00000,00000";
+	private static String BEISPIEL_P_RESULT_3DANCES = "2,0,1,3,0;4,0,4,1,0;3,0,4,5,0;1,0,4,4,0;5,0,2,2,0;6,0,6,6,0;1,4,5,3,2,6";
+
+	private static String EDGE_1 = "1";
+	private static String EDGE_1_RESULT = "1;1";
+
+	private static String EDGE_2 = "1,2";
+	private static String EDGE_2_RESULT = "1;2;1,2";
+
+	private static String EDGE_3 = "0,0";
+	private static String EDGE_3_INCOMPLETE = "1;2;1,2";
 
 	@Test
 	public void testBeispielB()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
+				createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_B_RESULT);
 	}
@@ -54,25 +65,54 @@ public class CalculatorTest
 	public void testBeispielP()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
+				createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_P_RESULT);
 	}
-	
+
+	@Test
+	public void testBeispielP_3Dances()
+	{
+		final Calculator test = new Calculator(
+				createJudgmentFromString(BEISPIEL_P_INCOMPLETE_3DANCES, 5, 6, 5));
+
+		System.out.println(new ExportHtml(test).getHTML("10"));
+
+		assertResultFromString(test, BEISPIEL_P_RESULT_3DANCES);
+	}
+
 	@Test
 	public void testBeispielEdgeCase1()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_E, 1, 1, 1));
+				createJudgmentFromString(EDGE_1, 1, 1, 1));
 
-		assertResultFromString(test, BEISPIEL_E_RESULT);
+		assertResultFromString(test, EDGE_1_RESULT);
+	}
+
+	@Test
+	public void testBeispielEdgeCase2()
+	{
+		final Calculator test = new Calculator(
+				createJudgmentFromString(EDGE_2, 1, 2, 1));
+
+		assertResultFromString(test, EDGE_2_RESULT);
+	}
+
+	@Test
+	public void testBeispielEdgeCase3()
+	{
+		final Calculator test = new Calculator(
+				createJudgmentFromString(EDGE_3, 1, 2, 1));
+
+		assertPreResultFromString(test, EDGE_3_INCOMPLETE);
 	}
 
 	@Test
 	public void testBeispielP_parts()
 	{
 		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
+				createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
 		for (int c = 0; c < 6; c++)
 		{
 			for (int j = 0; j < 5; j++)
@@ -116,7 +156,11 @@ public class CalculatorTest
 
 			for (int dance = 0; dance < test.getJudgement().getDances(); dance++)
 			{
-				assertEquals(Double.valueOf(resultForDance[dance]), test.getResult(dance, competitor).getValue(), 0.01);
+				final double expected = Double.valueOf(resultForDance[dance]);
+				if (expected > 0)
+				{
+					assertEquals(expected, test.getResult(dance, competitor).getValue(), 0.01);
+				}
 			}
 		}
 		final String[] resultForFinal = resultForCompetitor[test.getJudgement().getCompetitors()].split(",");
@@ -131,7 +175,7 @@ public class CalculatorTest
 		final String[] judgmentsForDance = gradesString.split(";");
 
 		final JudgementForFinal jff = new JudgementForFinal(dances,
-		        competitors, judges);
+				competitors, judges);
 
 		for (int d = 0; d < judgmentsForDance.length; d++)
 		{
@@ -139,10 +183,10 @@ public class CalculatorTest
 
 			for (int i = 0; i < judgmentsForCompetitor.length; i++)
 			{
-				for (int j = 0; j < judgmentsForCompetitor[j].length(); j++)
+				for (int j = 0; j < judgmentsForCompetitor[i].length(); j++)
 				{
 					if (judgmentsForCompetitor[i].charAt(j) > '0'
-					        && judgmentsForCompetitor[i].charAt(j) < '9')
+					&& judgmentsForCompetitor[i].charAt(j) < '9')
 					{
 						jff.setMark(d, i, j, (byte) (judgmentsForCompetitor[i].charAt(j) - '0'));
 					}

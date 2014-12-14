@@ -126,7 +126,7 @@ public class JudgementForFinal
 		else
 		{
 			throw new MarkOutOfRangeException("Input " + value
-			        + " out of range!");
+					+ " out of range!");
 		}
 	}
 
@@ -285,7 +285,15 @@ public class JudgementForFinal
 		final StringBuilder result = new StringBuilder();
 		for (int j = 0; j < judges; j++)
 		{
-			result.append(getMark(dance, competitor, j));
+			final int mark = getMark(dance, competitor, j);
+			if (mark > 0)
+			{
+				result.append(mark);
+			}
+			else
+			{
+				result.append("-");
+			}
 		}
 		return result.toString();
 	}

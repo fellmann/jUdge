@@ -47,8 +47,12 @@ public class Calculator
 	private double summe[];
 	private boolean doSkating = true;
 
+	private int validDances = 0;
+
 	private boolean appliedSkating10 = false;
 	private boolean appliedSkating11 = false;
+
+	private boolean[] isValid;
 
 	/**
 	 * Create new calculator and calculate results.
@@ -239,10 +243,19 @@ public class Calculator
 			for (int d = 0; d < judgement.getDances(); d++)
 			{
 				dancesCalc[d] = new CalcMajority(new JudgementForDance(
-				        judgement, d));
+						judgement, d));
+				if (judgement.isValid(d))
+				{
+					validDances++;
+					isValid[d] = true;
+				}
+				else
+				{
+					isValid[d] = false;
+				}
 			}
 
-			if (judgement.isValid())
+			if (validDances > 0)
 			{
 				while (wantedPlace < judgement.getCompetitors() + 1)
 				{
@@ -272,7 +285,7 @@ public class Calculator
 							{
 								wantedPlaceweg = curmaj.get(i);
 								result[wantedPlaceweg] = new Place(wantedPlace,
-										wantedPlace + curmaj.size() - 1);
+								        wantedPlace + curmaj.size() - 1);
 							}
 							all.removeAll(curmaj);
 						}
@@ -286,6 +299,17 @@ public class Calculator
 		{
 			throw new CalculationException(re);
 		}
+	}
+
+	/**
+	 * If not all judgements are ready, only dances with complete, valid input
+	 * are used for calculation.
+	 *
+	 * @return The count of valid dances.
+	 */
+	public int getValidDances()
+	{
+		return validDances;
 	}
 
 	/**
@@ -364,9 +388,12 @@ public class Calculator
 		{
 			competitor = remaining.get(ix);
 			cur = dancesCalc[0].getResult(competitor).getValue();
-			for (int i = 1; i < judgement.getDances(); i++)
+			for (int dance = 1; dance < judgement.getDances(); dance++)
 			{
-				cur += dancesCalc[i].getResult(competitor).getValue();
+				if (isValid[dance])
+				{
+					cur += dancesCalc[dance].getResult(competitor).getValue();
+				}
 			}
 			summe[competitor] = cur;
 			if (cur < max)
@@ -395,11 +422,12 @@ public class Calculator
 			if (which.contains(competitor))
 			{
 				cur = 0;
-				for (int i = 0; i < judgement.getDances(); i++)
+				for (int dance = 0; dance < judgement.getDances(); dance++)
 				{
-					if (dancesCalc[i].getResult(competitor).getValue() <= aidx)
+					if (isValid[dance]
+					        && dancesCalc[dance].getResult(competitor).getValue() <= aidx)
 					{
-						cur += dancesCalc[i].getResult(competitor).getValue();
+						cur += dancesCalc[dance].getResult(competitor).getValue();
 					}
 				}
 				table10_val2[competitor][aidx - 1] = cur;
@@ -435,9 +463,10 @@ public class Calculator
 			if (which.contains(competitor))
 			{
 				cur = 0;
-				for (int i = 0; i < judgement.getDances(); i++)
+				for (int dance = 0; dance < judgement.getDances(); dance++)
 				{
-					if (dancesCalc[i].getResult(competitor).getValue() <= aidx)
+					if (isValid[dance]
+							&& dancesCalc[dance].getResult(competitor).getValue() <= aidx)
 					{
 						cur++;
 					}
@@ -518,6 +547,7 @@ public class Calculator
 		table10_val1 = new double[judgement.getCompetitors()][judgement.getCompetitors()];
 		table10_val2 = new double[judgement.getCompetitors()][judgement.getCompetitors()];
 		summe = new double[judgement.getCompetitors()];
+		isValid = new boolean[judgement.getDances()];
 	}
 
 }
