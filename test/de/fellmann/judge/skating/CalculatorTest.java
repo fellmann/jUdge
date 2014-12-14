@@ -39,7 +39,7 @@ public class CalculatorTest
 	private static String BEISPIEL_P_RESULT = "2,1,1,3,2;4,3,4,1,6;3,5,4,5,1;1,4,4,4,5;5,6,2,2,4;6,2,6,6,3;1,2,3,4,5,6";
 	
 	private static String BEISPIEL_E = "1";
-	private static String BEISPIEL_E_RESULT = "1";
+	private static String BEISPIEL_E_RESULT = "1;1";
 
 	@Test
 	public void testBeispielB()
@@ -139,7 +139,7 @@ public class CalculatorTest
 
 			for (int i = 0; i < judgmentsForCompetitor.length; i++)
 			{
-				for (int j = 0; j < judgmentsForCompetitor[j].length(); j++)
+				for (int j = 0; j < judgmentsForCompetitor[i].length(); j++)
 				{
 					if (judgmentsForCompetitor[i].charAt(j) > '0'
 					        && judgmentsForCompetitor[i].charAt(j) < '9')
