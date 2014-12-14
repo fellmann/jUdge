@@ -37,6 +37,9 @@ public class CalculatorTest
 	private static String BEISPIEL_P = "22525,33636,45311,11253,66144,54462;12234,31313,25555,44441,66666,53122;11111,23456,34562,45623,52234,66345;33136,11252,45441,56323,22515,64664;26261,44636,15152,63345,51514,32423,";
 	private static String BEISPIEL_P_INCOMPLETE = "22525,33636,45311,11253,00000,00000;12204,31313,25055,44441,60066,53122;11111,00000,34562,45623,52234,66345;33136,11252,45441,56323,02505,64664;26261,40636,15102,63305,01514,30423,";
 	private static String BEISPIEL_P_RESULT = "2,1,1,3,2;4,3,4,1,6;3,5,4,5,1;1,4,4,4,5;5,6,2,2,4;6,2,6,6,3;1,2,3,4,5,6";
+	
+	private static String BEISPIEL_E = "1";
+	private static String BEISPIEL_E_RESULT = "1";
 
 	@Test
 	public void testBeispielB()
@@ -54,6 +57,15 @@ public class CalculatorTest
 		        createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
 
 		assertResultFromString(test, BEISPIEL_P_RESULT);
+	}
+	
+	@Test
+	public void testBeispielEdgeCase1()
+	{
+		final Calculator test = new Calculator(
+		        createJudgmentFromString(BEISPIEL_E, 1, 1, 1));
+
+		assertResultFromString(test, BEISPIEL_E_RESULT);
 	}
 
 	@Test
