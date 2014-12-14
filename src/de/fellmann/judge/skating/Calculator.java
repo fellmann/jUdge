@@ -243,7 +243,7 @@ public class Calculator
 			for (int d = 0; d < judgement.getDances(); d++)
 			{
 				dancesCalc[d] = new CalcMajority(new JudgementForDance(
-						judgement, d));
+				        judgement, d));
 				if (judgement.isValid(d))
 				{
 					validDances++;
@@ -255,7 +255,8 @@ public class Calculator
 				}
 			}
 
-			if (validDances > 0)
+			if (validDances > 0 && judgement.getCompetitors() > 0
+			        && judgement.getJudges() > 0)
 			{
 				while (wantedPlace < judgement.getCompetitors() + 1)
 				{
@@ -285,7 +286,7 @@ public class Calculator
 							{
 								wantedPlaceweg = curmaj.get(i);
 								result[wantedPlaceweg] = new Place(wantedPlace,
-								        wantedPlace + curmaj.size() - 1);
+										wantedPlace + curmaj.size() - 1);
 							}
 							all.removeAll(curmaj);
 						}
@@ -425,7 +426,7 @@ public class Calculator
 				for (int dance = 0; dance < judgement.getDances(); dance++)
 				{
 					if (isValid[dance]
-					        && dancesCalc[dance].getResult(competitor).getValue() <= aidx)
+							&& dancesCalc[dance].getResult(competitor).getValue() <= aidx)
 					{
 						cur += dancesCalc[dance].getResult(competitor).getValue();
 					}
@@ -466,7 +467,7 @@ public class Calculator
 				for (int dance = 0; dance < judgement.getDances(); dance++)
 				{
 					if (isValid[dance]
-							&& dancesCalc[dance].getResult(competitor).getValue() <= aidx)
+					        && dancesCalc[dance].getResult(competitor).getValue() <= aidx)
 					{
 						cur++;
 					}

@@ -87,6 +87,33 @@ public class CalculatorTest
 	}
 
 	@Test
+	public void testBeispielEdgeCase0Dances()
+	{
+		final Calculator test = new Calculator(
+		        createJudgmentFromString(EDGE_1, 0, 1, 1));
+
+		assertResultIsNull(test);
+	}
+
+	@Test
+	public void testBeispielEdgeCase0Competitors()
+	{
+		final Calculator test = new Calculator(
+		        createJudgmentFromString(EDGE_1, 1, 0, 1));
+
+		assertResultIsNull(test);
+	}
+
+	@Test
+	public void testBeispielEdgeCase0Judges()
+	{
+		final Calculator test = new Calculator(
+		        createJudgmentFromString(EDGE_1, 1, 1, 0));
+
+		assertResultIsNull(test);
+	}
+
+	@Test
 	public void testBeispielEdgeCase2()
 	{
 		final Calculator test = new Calculator(
@@ -142,6 +169,14 @@ public class CalculatorTest
 		}
 	}
 
+	private void assertResultIsNull(Calculator test)
+	{
+		for (int competitor = 0; competitor < test.getJudgement().getCompetitors(); competitor++)
+		{
+			assertEquals(null, test.getResult(competitor));
+		}
+	}
+
 	private void assertResultFromString(Calculator test, String result)
 	{
 
@@ -173,13 +208,13 @@ public class CalculatorTest
 		final JudgementForFinal jff = new JudgementForFinal(dances,
 		        competitors, judges);
 
-		for (int d = 0; d < judgmentsForDance.length; d++)
+		for (int d = 0; d < dances; d++)
 		{
 			final String[] judgmentsForCompetitor = judgmentsForDance[d].split(",");
 
-			for (int i = 0; i < judgmentsForCompetitor.length; i++)
+			for (int i = 0; i < competitors; i++)
 			{
-				for (int j = 0; j < judgmentsForCompetitor[i].length(); j++)
+				for (int j = 0; j < judges; j++)
 				{
 					if (judgmentsForCompetitor[i].charAt(j) > '0'
 					        && judgmentsForCompetitor[i].charAt(j) < '9')
