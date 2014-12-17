@@ -203,4 +203,16 @@ public class Place
 	{
 		return placeto;
 	}
+
+	/**
+	 * Adds an offset to a place.
+	 * 
+	 * @param offset
+	 *            The offset.
+	 * @return A new place object.
+	 */
+	public Place getWithOffset(int offset)
+	{
+		return new Place(placefrom + offset, placeto + offset);
+	}
 }
