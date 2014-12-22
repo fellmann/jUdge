@@ -1,18 +1,24 @@
 
 package de.fellmann.common;
 
-public class Nationality
+import de.fellmann.judge.competition.data.DataObject;
+
+public class Nationality extends DataObject
 {
-	private final String countryCode;
-	private final String countryString;
+	private String countryCode;
+	private String countryString;
+
+	public Nationality() {
+		
+	}
 
 	public Nationality(String code)
 	{
 		final String cc = CountryCodes.getInstance().find(code);
 		if (cc != null)
 		{
-			this.countryCode = code.toUpperCase();
-			this.countryString = cc.toLowerCase();
+			this.setCountryCode(code.toUpperCase());
+			this.setCountryString(cc.toLowerCase());
 		}
 		else
 		{
@@ -25,8 +31,18 @@ public class Nationality
 		return countryCode;
 	}
 
+	public void setCountryCode(String countryCode)
+	{
+		this.countryCode = countryCode;
+	}
+
 	public String getCountryString()
 	{
 		return countryString;
+	}
+
+	public void setCountryString(String countryString)
+	{
+		this.countryString = countryString;
 	}
 }

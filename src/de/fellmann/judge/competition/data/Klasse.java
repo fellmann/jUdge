@@ -1,4 +1,4 @@
-package de.fellmann.judge.competition;
+package de.fellmann.judge.competition.data;
 
 public class Klasse {
 	private static String formation_names[] = {"Formation"};

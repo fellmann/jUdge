@@ -44,33 +44,28 @@ class JudgementForDance implements JudgementForMajor
 		return dance;
 	}
 
-	@Override
-	public int getCompetitors()
-	{
-		return judgement.getCompetitors();
-	}
-
-	@Override
 	public int getDances()
 	{
 		return judgement.getDances();
 	}
 
-	@Override
 	public int getJudges()
 	{
 		return judgement.getJudges();
 	}
 
-	@Override
 	public boolean isSet(int competitor)
 	{
 		return judgement.isValid(dance, competitor);
 	}
 
-	@Override
 	public byte getJudgement(int competitor, int judge)
 	{
 		return judgement.getMark(dance, competitor, judge);
+	}
+
+	public int getCompetitors()
+	{
+		return judgement.getCompetitors();
 	}
 }

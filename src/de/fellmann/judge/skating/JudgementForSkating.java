@@ -37,31 +37,26 @@ class JudgementForSkating implements JudgementForMajor
 		return judgement;
 	}
 
-	@Override
 	public int getCompetitors()
 	{
 		return judgement.getCompetitors();
 	}
 
-	@Override
 	public int getDances()
 	{
 		return 1;
 	}
 
-	@Override
 	public int getJudges()
 	{
 		return judgement.getJudges() * judgement.getDances();
 	}
 
-	@Override
 	public boolean isSet(int competitor)
 	{
 		return true;
 	}
 
-	@Override
 	public byte getJudgement(int competitor, int judge)
 	{
 		return judgement.getMark(judge / judgement.getJudges(), competitor, judge
