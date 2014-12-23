@@ -12,6 +12,7 @@ import de.fellmann.judge.competition.data.Competitor;
 import de.fellmann.judge.competition.data.CompetitorState;
 import de.fellmann.judge.competition.data.Dance;
 import de.fellmann.judge.competition.data.DanceCompetitorJudgeKey;
+import de.fellmann.judge.competition.data.DisqualificationMode;
 import de.fellmann.judge.competition.data.Event;
 import de.fellmann.judge.competition.data.FinalResultData;
 import de.fellmann.judge.competition.data.Judge;
@@ -37,6 +38,8 @@ public class CompetitionTest
 			comp.getJudges().add(jj);
 		
 		comp.getDances().add(d);
+		
+		comp.setDisqualificationMode(DisqualificationMode.DISQUALIFIED_LASTPLACE_RAISE);
 		
 		Round round = new Round();
 		round.setRoundType(RoundType.Qualification);
@@ -85,11 +88,39 @@ public class CompetitionTest
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[4]), true);
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), true);
 		
+
+		round = new Round();
+		round.setRoundType(RoundType.SmallFinal);
+		
+		comp.getRounds().add(round);
+		FinalResultData finalData = new FinalResultData();
+		round.setResultData(finalData);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[0]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[1]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[2]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[3]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[4]), 3);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[0]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[1]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[2]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[3]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[4]), 2);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[0]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[1]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[2]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[3]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[4]), 1);
+		
+		
+		
 		round = new Round();
 		round.setRoundType(RoundType.Final);
 		
 		comp.getRounds().add(round);
-		FinalResultData finalData = new FinalResultData();
+		finalData = new FinalResultData();
 		round.setResultData(finalData);
 		
 		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[0]), 2);
@@ -128,6 +159,11 @@ public class CompetitionTest
 		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[3]), 3);
 		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), 2);
 		
+		round = new Round();
+		round.setRoundType(RoundType.End);
+		round.getDisqualified().put(c[4], true);
+		comp.getRounds().add(round);
+		
 		XStream xstream = new XStream();
 		xstream.setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
 		System.out.println(xstream.toXML(comp));
@@ -135,11 +171,15 @@ public class CompetitionTest
 		CompetitionController controller = new CompetitionController(comp);
 		controller.calculateAll();
 		for(int i=0;i<c.length;i++) {
+			System.out.println("-----");
 			System.out.println("Comp " + (i+1));
-			System.out.println(controller.getPlace(c[i]).toStringFromToPoint());
-			System.out.println(controller.getPlacingRound(c[i]).getRoundType());
+			if(controller.getDisqualified(c[i]))
+			{
+				System.out.println("Disqualified");
+			}
+				System.out.println(controller.getPlace(c[i]).toStringFromToPoint());
+				System.out.println(controller.getPlacingRound(c[i]).getRoundType());
 		}
-		System.out.println(controller.getRoundResults().get(0).getQualified());
 		
 	}
 }

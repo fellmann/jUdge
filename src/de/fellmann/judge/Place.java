@@ -35,7 +35,7 @@ import java.text.DecimalFormat;
  * @author Hanno Fellmann
  *
  */
-public class Place
+public class Place implements Comparable<Place>
 {
 	private final int placefrom, placeto;
 
@@ -214,5 +214,10 @@ public class Place
 	public Place getWithOffset(int offset)
 	{
 		return new Place(placefrom + offset, placeto + offset);
+	}
+
+	public int compareTo(Place o)
+	{
+		return Integer.compare(this.placefrom + this.placeto, o.placefrom + o.placeto);
 	}
 }

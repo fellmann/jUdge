@@ -12,6 +12,7 @@ public abstract class RoundResult
 	private ArrayList<Competitor> qualified = new ArrayList<Competitor>();
 	private ArrayList<Competitor> notQualified = new ArrayList<Competitor>();
 	private ArrayList<Competitor> disqualified = new ArrayList<Competitor>();
+	private ArrayList<Competitor> participants = new ArrayList<Competitor>();
 	
 	public HashMap<Competitor, Place> getPlace()
 	{
@@ -44,5 +45,13 @@ public abstract class RoundResult
 	public void setDisqualified(ArrayList<Competitor> disqualified)
 	{
 		this.disqualified = disqualified;
+	}
+	public ArrayList<Competitor> getParticipants()
+	{
+		return participants;
+	}
+	public void setParticipants(ArrayList<Competitor> participants)
+	{
+		this.participants = participants;
 	}
 }

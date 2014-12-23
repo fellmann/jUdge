@@ -34,7 +34,7 @@ public class ResultProvider
 	{
 		ResultData resultData = round.getResultData();
 		RoundResult roundResult = null;
-
+		
 		switch(round.getRoundType())
 		{
 		case Qualification:
@@ -78,6 +78,7 @@ public class ResultProvider
 			{
 				final QualificationRoundResult qualificationRoundResult = new QualificationRoundResult();
 				roundResult = qualificationRoundResult;
+				roundResult.setParticipants(preQualified);
 				
 				QualificationResultData qualificationResultData = (QualificationResultData) resultData;
 
@@ -139,14 +140,15 @@ public class ResultProvider
 							}
 						}
 					}
-					
+
+					sumCompetitor = qualificationRoundResult.getSumCompetitor().get(competitor);
+					toSort.add(competitor);
 					if (Boolean.TRUE.equals(round.getDisqualified().get(
 							competitor)))
 					{
 						roundResult.getDisqualified().add(competitor);
 					}
 					else {
-						sumCompetitor = qualificationRoundResult.getSumCompetitor().get(competitor);
 						if(sumCompetitor != null && sumCompetitor >= qualificationResultData.getSumToQualify())
 						{
 							roundResult.getQualified().add(competitor);
@@ -154,7 +156,6 @@ public class ResultProvider
 						else
 						{
 							roundResult.getNotQualified().add(competitor);
-							toSort.add(competitor);
 						}
 					}
 				}
@@ -213,8 +214,9 @@ public class ResultProvider
 						roundResult.getNotQualified().add(competitor);
 					}
 				}
+				roundResult.setParticipants(preQualified);
 				
-				calculateFinalJudgement(competition, round, preQualified, finalRoundResult);
+				calculateFinalJudgement(competition, round, finalRoundResult);
 				break;
 			}
 		case SmallFinal:
@@ -234,10 +236,14 @@ public class ResultProvider
 						roundResult.getQualified().add(competitor);
 					}
 				}
+				roundResult.setParticipants(preNotQualified);
 				
-				calculateFinalJudgement(competition, round, preNotQualified, finalRoundResult);
+				calculateFinalJudgement(competition, round, finalRoundResult);
 				break;
 			}
+		case End:
+			roundResult = new EndRoundResult();
+			break;
 		default:
 			throw new RuntimeException("Not implemented: " + round.getRoundType());
 			
@@ -246,40 +252,39 @@ public class ResultProvider
 		return roundResult;
 	}
 
-	private void calculateFinalJudgement(Competition competition, Round round, ArrayList<Competitor> preQualified, FinalRoundResult roundResult)
+	private void calculateFinalJudgement(Competition competition, Round round, FinalRoundResult roundResult)
 	{
 		FinalResultData finalResultData = (FinalResultData) round.getResultData();
-		JudgementForFinal judgement = new JudgementForFinal(competition.getDances().size(), preQualified.size()-roundResult.getDisqualified().size(), competition.getJudges().size());
+		ArrayList<Competitor> participants = roundResult.getParticipants();
+		JudgementForFinal judgement = new JudgementForFinal(competition.getDances().size(), participants.size(), competition.getJudges().size());
 		
 		for(int d = 0; d <competition.getDances().size();d++)
 		{
 			Dance dance = competition.getDances().get(d);
-			for(int c = 0; c < preQualified.size(); c++)
+			for(int c = 0; c < participants.size(); c++)
 			{
-				Competitor competitor = preQualified.get(c);
-				if(!Boolean.TRUE.equals(round.getDisqualified().get(
-						competitor)))
+				Competitor competitor = participants.get(c);
+				for(int j=0;j<competition.getJudges().size(); j++)
 				{
-					for(int j=0;j<competition.getJudges().size(); j++)
+					Judge judge = competition.getJudges().get(j);
+					final Integer mark = finalResultData.getMark().get(new DanceCompetitorJudgeKey(dance, competitor, judge));
+					if(mark != null)
 					{
-						Judge judge = competition.getJudges().get(j);
-						final Integer mark = finalResultData.getMark().get(new DanceCompetitorJudgeKey(dance, competitor, judge));
-						if(mark != null)
-						{
-							judgement.setMark(d, c, j, (byte)(int)mark);
-						}
+						judgement.setMark(d, c, j, (byte)(int)mark);
 					}
 				}
 			}
 		}
 		
 		Calculator calculator = new Calculator(judgement);
+		
+		roundResult.setCalculator(calculator);
+		
 		int resultOffset = roundResult.getQualified().size();
-		for(int c = 0; c < preQualified.size(); c++)
+		for(int c = 0; c < participants.size(); c++)
 		{
-			Competitor competitor = preQualified.get(c);
-			if(!Boolean.TRUE.equals(round.getDisqualified().get(
-					competitor)))
+			Competitor competitor = participants.get(c);
+			if(calculator.getResult(c) != null)
 			{
 				roundResult.getPlace().put(competitor, calculator.getResult(c).getWithOffset(resultOffset));
 			}

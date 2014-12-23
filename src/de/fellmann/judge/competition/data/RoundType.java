@@ -7,7 +7,7 @@ public enum RoundType {
 	Redance(false),
 	SmallFinal(false),
 	Final(true),
-	Result(true);
+	End(true);
 	
 	private final boolean qualifying;
 	
