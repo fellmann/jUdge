@@ -35,6 +35,7 @@ public class ResultProvider
 		ResultData resultData = round.getResultData();
 		RoundResult roundResult = null;
 		
+		
 		switch(round.getRoundType())
 		{
 		case Qualification:
@@ -46,8 +47,7 @@ public class ResultProvider
 
 				for (Competitor competitor : preQualified)
 				{
-					if (Boolean.TRUE.equals(round.getDisqualified().get(
-							competitor)))
+					if (Boolean.TRUE.equals(round.getDisqualified().get(competitor)))
 					{
 						roundResult.getDisqualified().add(competitor);
 					}
@@ -243,12 +243,21 @@ public class ResultProvider
 			}
 		case End:
 			roundResult = new EndRoundResult();
+			
 			break;
 		default:
 			throw new RuntimeException("Not implemented: " + round.getRoundType());
 			
 		}
 
+		for(Competitor competitor : competition.getCompetitors())
+		{
+			if(Boolean.TRUE.equals(round.getDisqualified().get(competitor)) && !roundResult.getDisqualified().contains(competitor))
+			{
+				roundResult.getDisqualified().add(competitor);
+			}
+		}
+		
 		return roundResult;
 	}
 
