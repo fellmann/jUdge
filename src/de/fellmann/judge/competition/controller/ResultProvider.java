@@ -12,11 +12,14 @@ import de.fellmann.judge.competition.data.CompetitorJudgeKey;
 import de.fellmann.judge.competition.data.Dance;
 import de.fellmann.judge.competition.data.DanceCompetitorJudgeKey;
 import de.fellmann.judge.competition.data.DanceCompetitorKey;
+import de.fellmann.judge.competition.data.FinalResultData;
 import de.fellmann.judge.competition.data.Judge;
 import de.fellmann.judge.competition.data.ManualResultData;
 import de.fellmann.judge.competition.data.QualificationResultData;
 import de.fellmann.judge.competition.data.ResultData;
 import de.fellmann.judge.competition.data.Round;
+import de.fellmann.judge.skating.Calculator;
+import de.fellmann.judge.skating.JudgementForFinal;
 
 public class ResultProvider
 {
@@ -193,18 +196,72 @@ public class ResultProvider
 				}
 			}
 			break;
+		case Final:
+			FinalRoundResult finalRoundResult = new FinalRoundResult();
+			FinalResultData finalResultData = (FinalResultData)resultData;
+			roundResult = finalRoundResult;
+			
+			for(Competitor competitor : preQualified)
+			{
+				if (Boolean.TRUE.equals(round.getDisqualified().get(
+						competitor)))
+				{
+					roundResult.getDisqualified().add(competitor);
+				}
+				else
+				{
+					roundResult.getNotQualified().add(competitor);
+				}
+			}
+			
+			JudgementForFinal judgement = new JudgementForFinal(competition.getDances().size(), preQualified.size()-roundResult.getDisqualified().size(), competition.getJudges().size());
+			
+			for(int d = 0; d <competition.getDances().size();d++)
+			{
+				Dance dance = competition.getDances().get(d);
+				for(int c = 0; c < preQualified.size(); c++)
+				{
+					Competitor competitor = preQualified.get(c);
+					if(!Boolean.TRUE.equals(round.getDisqualified().get(
+							competitor)))
+					{
+						for(int j=0;j<competition.getJudges().size(); j++)
+						{
+							Judge judge = competition.getJudges().get(j);
+							final Integer mark = finalResultData.getMark().get(new DanceCompetitorJudgeKey(dance, competitor, judge));
+							if(mark != null)
+							{
+								judgement.setMark(d, c, j, (byte)(int)mark);
+							}
+						}
+					}
+				}
+			}
+			
+			Calculator calculator = new Calculator(judgement);
+			int resultOffset = roundResult.getQualified().size();
+			for(int c = 0; c < preQualified.size(); c++)
+			{
+				Competitor competitor = preQualified.get(c);
+				if(!Boolean.TRUE.equals(round.getDisqualified().get(
+						competitor)))
+				{
+					roundResult.getPlace().put(competitor, calculator.getResult(c).getWithOffset(resultOffset));
+				}
+			}
+			break;
 		default:
-			throw new RuntimeException("Not implemented");
+			throw new RuntimeException("Not implemented: " + round.getRoundType());
 			
 		}
 
 		return roundResult;
 	}
-	
-	private <T>  void putOrAdd(Map<T, Integer> map, T key, int value)
+
+	private <T> void putOrAdd(Map<T, Integer> map, T key, int value)
 	{
 		Integer oldValue = map.get(key);
-		if(oldValue == null)
+		if (oldValue == null)
 		{
 			map.put(key, value);
 		}

@@ -3,6 +3,7 @@ package de.fellmann.judge.competition.controller;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
+import de.fellmann.judge.Place;
 import de.fellmann.judge.competition.data.Competition;
 import de.fellmann.judge.competition.data.Competitor;
 import de.fellmann.judge.competition.data.CompetitorState;
@@ -89,5 +90,27 @@ public class CompetitionController
 	public void setRoundResults(ArrayList<RoundResult> roundResults)
 	{
 		this.roundResults = roundResults;
+	}
+	
+	public Place getPlace(Competitor competitor)
+	{
+		for(int r = roundResults.size()-1; r>=0; r--)
+		{
+			Place place = roundResults.get(r).getPlace().get(competitor);
+			if(place != null)
+				return place;
+		}
+		return null;
+	}
+	
+	public Round getPlacingRound(Competitor competitor)
+	{
+		for(int r = roundResults.size()-1; r>=0; r--)
+		{
+			Place place = roundResults.get(r).getPlace().get(competitor);
+			if(place != null)
+				return competition.getRounds().get(r);
+		}
+		return null;
 	}
 }

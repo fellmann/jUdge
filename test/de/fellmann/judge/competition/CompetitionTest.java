@@ -13,6 +13,7 @@ import de.fellmann.judge.competition.data.CompetitorState;
 import de.fellmann.judge.competition.data.Dance;
 import de.fellmann.judge.competition.data.DanceCompetitorJudgeKey;
 import de.fellmann.judge.competition.data.Event;
+import de.fellmann.judge.competition.data.FinalResultData;
 import de.fellmann.judge.competition.data.Judge;
 import de.fellmann.judge.competition.data.QualificationResultData;
 import de.fellmann.judge.competition.data.Round;
@@ -84,24 +85,59 @@ public class CompetitionTest
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[4]), true);
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), true);
 		
-
+		round = new Round();
+		round.setRoundType(RoundType.Final);
+		
+		comp.getRounds().add(round);
+		FinalResultData finalData = new FinalResultData();
+		round.setResultData(finalData);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[0]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[1]), 6);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[2]), 4);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[3]), 5);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[4]), 5);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[0]), 4);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[1]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[2]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[3]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[4]), 3);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[0]), 6);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[1]), 5);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[2]), 6);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[3]), 6);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[4]), 6);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[0]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[1]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[2]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[3]), 4);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[4]), 1);
+		
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[0]), 5);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[1]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[2]), 1);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[3]), 2);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[4]), 4);
+	
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[0]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[1]), 4);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[2]), 5);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[3]), 3);
+		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), 2);
+		
 		XStream xstream = new XStream();
 		xstream.setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
 		System.out.println(xstream.toXML(comp));
 		
 		CompetitionController controller = new CompetitionController(comp);
 		controller.calculateAll();
-		QualificationRoundResult firstRoundResult = (QualificationRoundResult)controller.getRoundResults().get(0);
 		for(int i=0;i<c.length;i++) {
 			System.out.println("Comp " + (i+1));
-			System.out.println(firstRoundResult.getSumCompetitor().get(c[i]));
-			if(firstRoundResult.getQualified().contains(c[i]))
-				System.out.println("qualified");
-			if(firstRoundResult.getNotQualified().contains(c[i]))
-				System.out.println("not qualified");
-			if(firstRoundResult.getPlace().get(c[i]) != null)
-				System.out.println(firstRoundResult.getPlace().get(c[i]).toStringFromToPoint());
-			System.out.println("--------");
+			System.out.println(controller.getPlace(c[i]).toStringFromToPoint());
+			System.out.println(controller.getPlacingRound(c[i]).getRoundType());
 		}
 		System.out.println(controller.getRoundResults().get(0).getQualified());
 		
