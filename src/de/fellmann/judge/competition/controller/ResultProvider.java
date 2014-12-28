@@ -3,7 +3,6 @@ package de.fellmann.judge.competition.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Map;
 
 import de.fellmann.judge.Place;
 import de.fellmann.judge.competition.data.Competition;
@@ -99,7 +98,7 @@ public class ResultProvider
 							if(sumCompetitorJudge != null)
 							{
 								qualificationRoundResult.getSumCompetitorJudge().put(new CompetitorJudgeKey(competitor, j), sumCompetitorJudge);
-								putOrAdd(qualificationRoundResult.getSumCompetitor(), competitor, sumCompetitorJudge);
+								SortTools.putOrAdd(qualificationRoundResult.getSumCompetitor(), competitor, sumCompetitorJudge);
 							}
 						}
 						if(sumCompetitor != null) {
@@ -125,7 +124,7 @@ public class ResultProvider
 					
 					if(!qualificationRoundResult.getSumCompetitor().containsKey(competitor))
 					{
-						putOrAdd(qualificationRoundResult.getSumCompetitor(), competitor, 0);
+						SortTools.putOrAdd(qualificationRoundResult.getSumCompetitor(), competitor, 0);
 						for(Dance d : competition.getDances())
 						{
 							for(Judge j : competition.getJudges())
@@ -133,9 +132,9 @@ public class ResultProvider
 								Boolean cross = qualificationResultData.getCross().get(new DanceCompetitorJudgeKey(d, competitor, j));
 								if(Boolean.TRUE.equals(cross))
 								{
-									putOrAdd(qualificationRoundResult.getSumCompetitor(), competitor, 1);
-									putOrAdd(qualificationRoundResult.getSumDanceCompetitor(), new DanceCompetitorKey(d, competitor), 1);
-									putOrAdd(qualificationRoundResult.getSumCompetitorJudge(), new CompetitorJudgeKey(competitor, j), 1);
+									SortTools.putOrAdd(qualificationRoundResult.getSumCompetitor(), competitor, 1);
+									SortTools.putOrAdd(qualificationRoundResult.getSumDanceCompetitor(), new DanceCompetitorKey(d, competitor), 1);
+									SortTools.putOrAdd(qualificationRoundResult.getSumCompetitorJudge(), new CompetitorJudgeKey(competitor, j), 1);
 								}
 							}
 						}
@@ -170,7 +169,7 @@ public class ResultProvider
 					}
 				});
 
-				int placeOffset = roundResult.getQualified().size();
+				int placeOffset = 0;
 				int count = 1;
 				for(int i=0;i<toSort.size();i+=count)
 				{
@@ -297,19 +296,6 @@ public class ResultProvider
 			{
 				roundResult.getPlace().put(competitor, calculator.getResult(c).getWithOffset(resultOffset));
 			}
-		}
-	}
-	
-	private <T> void putOrAdd(Map<T, Integer> map, T key, int value)
-	{
-		Integer oldValue = map.get(key);
-		if (oldValue == null)
-		{
-			map.put(key, value);
-		}
-		else
-		{
-			map.put(key, value + oldValue);
 		}
 	}
 }

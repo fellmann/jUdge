@@ -25,6 +25,8 @@ package de.fellmann.judge;
 
 import java.text.DecimalFormat;
 
+import de.fellmann.judge.competition.PlaceSum;
+
 /**
  * Representation of a result place.
  * <p>
@@ -136,6 +138,20 @@ public class Place implements Comparable<Place>
 		{
 			return placefrom;
 		}
+	}
+
+	/**
+	 * Returns an integer value for sorting places.
+	 *
+	 * @return placeFrom + placeTo
+	 */
+	public int getSortValue()
+	{
+		return (placefrom + placeto);
+	}
+	
+	public static int compare(Place p1, Place p2) {
+		return Integer.compare(p1.getSortValue(), p2.getSortValue());
 	}
 
 	/**

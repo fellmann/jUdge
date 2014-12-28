@@ -4,20 +4,13 @@ package de.fellmann.judge.competition.data;
 
 public class Competitor extends DataObject
 {
-	private Person person;
 	private int countStarRounds;
 	private CompetitorState state;
-
-	public Person getPerson()
-	{
-		return person;
-	}
-
-	public void setPerson(Person person)
-	{
-		this.person = person;
-	}
-
+	private Club club;
+	private String name;
+	private int points;
+	private int placings;
+	
 	public int getCountStarRounds()
 	{
 		return countStarRounds;
@@ -36,5 +29,35 @@ public class Competitor extends DataObject
 	public void setState(CompetitorState state)
 	{
 		this.state = state;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public int getPoints()
+	{
+		return points;
+	}
+
+	public void setPoints(int points)
+	{
+		this.points = points;
+	}
+
+	public int getPlacings()
+	{
+		return placings;
+	}
+
+	public void setPlacings(int placings)
+	{
+		this.placings = placings;
 	}
 }

@@ -1,10 +1,14 @@
 package de.fellmann.judge.competition;
 
+import static org.junit.Assert.*;
+import static org.hamcrest.BaseMatcher.*;
+
 import org.junit.Test;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
 
+import de.fellmann.judge.Place;
 import de.fellmann.judge.competition.controller.CompetitionController;
 import de.fellmann.judge.competition.controller.QualificationRoundResult;
 import de.fellmann.judge.competition.data.Competition;
@@ -16,6 +20,7 @@ import de.fellmann.judge.competition.data.DisqualificationMode;
 import de.fellmann.judge.competition.data.Event;
 import de.fellmann.judge.competition.data.FinalResultData;
 import de.fellmann.judge.competition.data.Judge;
+import de.fellmann.judge.competition.data.Person;
 import de.fellmann.judge.competition.data.QualificationResultData;
 import de.fellmann.judge.competition.data.Round;
 import de.fellmann.judge.competition.data.RoundType;
@@ -27,6 +32,12 @@ public class CompetitionTest
 		Judge j[] = new Judge[] { new Judge(), new Judge(), new Judge(), new Judge(), new Judge() };
 		Competitor c[] = new Competitor[] { new Competitor(), new Competitor(), new Competitor(), new Competitor(), new Competitor(), new Competitor(), new Competitor(), new Competitor(), new Competitor() };
 		Dance d = new Dance();
+		
+		for(int i=0;i<c.length;i++)
+		{
+			Person p = new Person();
+			c[i].setName("Competitor " + i);
+		}
 		
 		Competition comp = new Competition();
 		for(Competitor cc : c)
@@ -87,8 +98,17 @@ public class CompetitionTest
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[4], j[4]), true);
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[4]), true);
 		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), true);
-		
 
+		
+		CompetitionController controller = new CompetitionController(comp);
+		Place[] expected1Round = new Place[] {new Place(5, 6), new Place(8, 9), new Place(1, 4), new Place(5, 6), new Place(1, 4), new Place(1, 4), new Place(8, 9), new Place(7), new Place(1, 4)};
+		int[] expected1RoundSums = new int[] {4, 0, 5, 4, 5, 5, 0, 2, 5};
+		for(int i=0;i<c.length;i++) {
+			assertEquals(expected1Round[i], controller.getPlace(c[i]));
+			assertEquals(expected1RoundSums[i], (int)((QualificationRoundResult)controller.getRoundResults().get(0)).getSumCompetitor().get(c[i]));
+		}
+		
+		
 		round = new Round();
 		round.setRoundType(RoundType.SmallFinal);
 		
@@ -161,24 +181,13 @@ public class CompetitionTest
 		
 		round = new Round();
 		round.setRoundType(RoundType.End);
-		round.getDisqualified().put(c[4], true);
 		comp.getRounds().add(round);
 		
-		XStream xstream = new XStream();
-		xstream.setMarshallingStrategy(new ReferenceByIdMarshallingStrategy());
-		System.out.println(xstream.toXML(comp));
-		
-		CompetitionController controller = new CompetitionController(comp);
+		controller = new CompetitionController(comp);
 		controller.calculateAll();
+		Place[] expected = new Place[] {new Place(5), new Place(9), new Place(2), new Place(6), new Place(3), new Place(1), new Place(7), new Place(8), new Place(4)};
 		for(int i=0;i<c.length;i++) {
-			System.out.println("-----");
-			System.out.println("Comp " + (i+1));
-			if(controller.getDisqualified(c[i]))
-			{
-				System.out.println("Disqualified");
-			}
-				System.out.println(controller.getPlace(c[i]).toStringFromToPoint());
-				System.out.println(controller.getPlacingRound(c[i]).getRoundType());
+			assertEquals(expected[i], controller.getPlace(c[i]));
 		}
 		
 	}

@@ -20,6 +20,7 @@ public class CompetitionController
 	public CompetitionController(Competition competition)
 	{
 		this.competition = competition;
+		calculateAll();
 	}
 
 	public Competition getCompetition()
@@ -49,6 +50,9 @@ public class CompetitionController
 
 	public void calculateAll() {
 		getRoundResults().clear();
+		
+		disqualified.clear();
+		
 		ArrayList<Competitor> preQualified = new ArrayList<Competitor>();
 		ArrayList<Competitor> preNotQualified = new ArrayList<Competitor>();
 
@@ -142,6 +146,22 @@ public class CompetitionController
 			}
 						
 		}
+	}
+	
+	public int getBeatenCompetitors(Competitor competitor) {
+		if(disqualified.contains(competitor))
+			return 0;
+		int sum = 0;
+		Place place = getPlace(competitor);
+		for(Competitor c : competition.getCompetitors())
+		{
+			if(competitor != c && !disqualified.contains(c))
+			{
+				if(place.getPlaceTo() < getPlace(c).getPlaceFrom())
+					sum ++;
+			}
+		}
+		return sum;
 	}
 	
 	private Place getPlaceWithDisqualified(Competitor competitor)
