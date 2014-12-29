@@ -16,7 +16,6 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import de.fellmann.judge.Place;
 import de.fellmann.judge.competition.controller.CompetitionController;
-import de.fellmann.judge.competition.controller.QualificationRoundResult;
 import de.fellmann.judge.competition.data.Competition;
 import de.fellmann.judge.competition.data.Competitor;
 import de.fellmann.judge.competition.data.CompetitorState;
@@ -29,6 +28,7 @@ import de.fellmann.judge.competition.data.QualificationResultData;
 import de.fellmann.judge.competition.data.Round;
 import de.fellmann.judge.competition.data.RoundType;
 import de.fellmann.judge.competition.persistence.DataObjectConverter;
+import de.fellmann.judge.competition.result.QualificationRoundResult;
 
 public class CompetitionTest
 {
@@ -109,7 +109,7 @@ public class CompetitionTest
 		int[] expected1RoundSums = new int[] {4, 0, 5, 4, 5, 5, 0, 2, 5};
 		for(int i=0;i<c.length;i++) {
 			assertEquals(expected1Round[i], controller.getPlace(c[i]));
-			assertEquals(expected1RoundSums[i], (int)((QualificationRoundResult)controller.getRoundResults().get(0)).getSumCompetitor().get(c[i]));
+			assertEquals(expected1RoundSums[i], (int)((QualificationRoundResult)controller.getResult().getRoundResults().get(0)).getSumCompetitor().get(c[i]));
 		}
 		
 		

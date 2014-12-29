@@ -1,4 +1,4 @@
-package de.fellmann.judge.competition.controller;
+package de.fellmann.judge.competition.result;
 
 import de.fellmann.judge.skating.Calculator;
 

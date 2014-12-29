@@ -17,6 +17,11 @@ import de.fellmann.judge.competition.data.ManualResultData;
 import de.fellmann.judge.competition.data.QualificationResultData;
 import de.fellmann.judge.competition.data.ResultData;
 import de.fellmann.judge.competition.data.Round;
+import de.fellmann.judge.competition.result.EndRoundResult;
+import de.fellmann.judge.competition.result.FinalRoundResult;
+import de.fellmann.judge.competition.result.ManualRoundResult;
+import de.fellmann.judge.competition.result.QualificationRoundResult;
+import de.fellmann.judge.competition.result.RoundResult;
 import de.fellmann.judge.skating.Calculator;
 import de.fellmann.judge.skating.JudgementForFinal;
 

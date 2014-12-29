@@ -10,12 +10,13 @@ import de.fellmann.judge.competition.data.CompetitorState;
 import de.fellmann.judge.competition.data.DisqualificationMode;
 import de.fellmann.judge.competition.data.ResultData;
 import de.fellmann.judge.competition.data.Round;
+import de.fellmann.judge.competition.result.CompetitionResult;
+import de.fellmann.judge.competition.result.RoundResult;
 
 public class CompetitionController
 {
 	private Competition competition;
-	private ArrayList<RoundResult> roundResults = new ArrayList<RoundResult>();
-	private ArrayList<Competitor> disqualified = new ArrayList<Competitor>();
+	private CompetitionResult result = new CompetitionResult(); 
 	
 	public CompetitionController(Competition competition)
 	{
@@ -49,9 +50,9 @@ public class CompetitionController
 	}
 
 	public void calculateAll() {
-		getRoundResults().clear();
+		setResult(new CompetitionResult());
 		
-		disqualified.clear();
+		getResult().setCompetition(competition);
 		
 		ArrayList<Competitor> preQualified = new ArrayList<Competitor>();
 		ArrayList<Competitor> preNotQualified = new ArrayList<Competitor>();
@@ -72,15 +73,15 @@ public class CompetitionController
 			
 			preQualified = roundResult.getQualified();
 			preNotQualified = roundResult.getNotQualified();
-			this.getRoundResults().add(roundResult);
+			getResult().getRoundResults().add(roundResult);
 		}
 		
 		for(Competitor competitor : competition.getCompetitors()) {
 			for(int i=0;i<competition.getRounds().size();i++)
 			{
-				if(roundResults.get(i).getDisqualified().contains(competitor))
+				if(getResult().getRoundResults().get(i).getDisqualified().contains(competitor))
 				{
-					getDisqualified().add(competitor);
+					getResult().getDisqualified().add(competitor);
 					break;
 				}
 			}
@@ -99,35 +100,25 @@ public class CompetitionController
 		}
 		return null;
 	}
-
-	public ArrayList<RoundResult> getRoundResults()
-	{
-		return roundResults;
-	}
-
-	public void setRoundResults(ArrayList<RoundResult> roundResults)
-	{
-		this.roundResults = roundResults;
-	}
 	
 	public Place getPlace(Competitor competitor)
 	{
 		if(competition.getDisqualificationMode() == DisqualificationMode.DISQUALIFIED_LEAVE_EMPTY)
 		{
-			if(disqualified.contains(competitor))
+			if(getResult().getDisqualified().contains(competitor))
 				return null;
 			return getPlaceWithDisqualified(competitor);
 		}
 		else {
-			if(disqualified.contains(competitor))
+			if(getResult().getDisqualified().contains(competitor))
 			{
 				return new Place(competition.getCompetitors().size());
 			}
 			Place place = getPlaceWithDisqualified(competitor);
 			if(place != null) {
 				Place placeResult = place;
-				for(int i = 0; i < disqualified.size(); i++) {
-					Place placeDisq = getPlaceWithDisqualified(disqualified.get(i));
+				for(int i = 0; i < getResult().getDisqualified().size(); i++) {
+					Place placeDisq = getPlaceWithDisqualified(getResult().getDisqualified().get(i));
 					if(placeDisq != null) {
 						if(place.compareTo(placeDisq) == 1)
 						{
@@ -149,13 +140,13 @@ public class CompetitionController
 	}
 	
 	public int getBeatenCompetitors(Competitor competitor) {
-		if(disqualified.contains(competitor))
+		if(getResult().getDisqualified().contains(competitor))
 			return 0;
 		int sum = 0;
 		Place place = getPlace(competitor);
 		for(Competitor c : competition.getCompetitors())
 		{
-			if(competitor != c && !disqualified.contains(c))
+			if(competitor != c && !getResult().getDisqualified().contains(c))
 			{
 				if(place.getPlaceTo() < getPlace(c).getPlaceFrom())
 					sum ++;
@@ -166,9 +157,9 @@ public class CompetitionController
 	
 	private Place getPlaceWithDisqualified(Competitor competitor)
 	{
-		for(int r = roundResults.size()-1; r>=0; r--)
+		for(int r = getResult().getRoundResults().size()-1; r>=0; r--)
 		{
-			Place place = roundResults.get(r).getPlace().get(competitor);
+			Place place = getResult().getRoundResults().get(r).getPlace().get(competitor);
 			if(place != null)
 			{
 				return place;
@@ -176,17 +167,12 @@ public class CompetitionController
 		}
 		return null;
 	}
-
-	public boolean getDisqualified(Competitor competitor)
-	{
-		return disqualified.contains(competitor);
-	}
 	
 	public Round getPlacingRound(Competitor competitor)
 	{
-		for(int r = roundResults.size()-1; r>=0; r--)
+		for(int r = getResult().getRoundResults().size()-1; r>=0; r--)
 		{
-			Place place = roundResults.get(r).getPlace().get(competitor);
+			Place place = getResult().getRoundResults().get(r).getPlace().get(competitor);
 			if(place != null)
 				return competition.getRounds().get(r);
 		}
@@ -195,21 +181,21 @@ public class CompetitionController
 	
 	public Round getDisqualifyingRound(Competitor competitor)
 	{
-		for(int r = roundResults.size()-1; r>=0; r--)
+		for(int r = getResult().getRoundResults().size()-1; r>=0; r--)
 		{
-			if(roundResults.get(r).getDisqualified().contains(competitor))
+			if(getResult().getRoundResults().get(r).getDisqualified().contains(competitor))
 				return competition.getRounds().get(r);
 		}
 		return null;
 	}
 
-	public ArrayList<Competitor> getDisqualified()
+	public CompetitionResult getResult()
 	{
-		return disqualified;
+		return result;
 	}
 
-	public void setDisqualified(ArrayList<Competitor> disqualified)
+	public void setResult(CompetitionResult result)
 	{
-		this.disqualified = disqualified;
+		this.result = result;
 	}
 }
