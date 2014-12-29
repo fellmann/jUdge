@@ -1,8 +1,6 @@
 package de.fellmann.judge.competition.data;
 
-import de.fellmann.common.Nationality;
-
-public class Club
+public class Club extends DataObject
 {
 	private String name;
 	private Nationality nationality;

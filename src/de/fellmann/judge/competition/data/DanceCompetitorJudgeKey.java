@@ -1,6 +1,5 @@
 package de.fellmann.judge.competition.data;
 
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 public class DanceCompetitorJudgeKey
 {

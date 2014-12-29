@@ -1,6 +1,5 @@
-package de.fellmann.judge.competition;
+package de.fellmann.judge;
 
-import de.fellmann.judge.Place;
 
 public class PlaceSum implements Comparable<PlaceSum>
 {

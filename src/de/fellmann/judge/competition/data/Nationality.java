@@ -1,7 +1,7 @@
 
-package de.fellmann.common;
+package de.fellmann.judge.competition.data;
 
-import de.fellmann.judge.competition.data.DataObject;
+import de.fellmann.common.CountryCodes;
 
 public class Nationality extends DataObject
 {

@@ -2,9 +2,6 @@ package de.fellmann.judge.competition.data;
 
 import java.util.UUID;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-
 public abstract class DataObject implements Comparable<DataObject>
 {
 	protected String uuid = UUID.randomUUID().toString();

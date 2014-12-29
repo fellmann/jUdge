@@ -1,12 +1,18 @@
 package de.fellmann.judge.competition;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.BaseMatcher.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.thoughtworks.xstream.MarshallingStrategy;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.ReferenceByIdMarshallingStrategy;
+import com.thoughtworks.xstream.alias.ClassMapper;
+import com.thoughtworks.xstream.converters.ConverterLookup;
+import com.thoughtworks.xstream.converters.DataHolder;
+import com.thoughtworks.xstream.core.DefaultConverterLookup;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.mapper.Mapper;
 
 import de.fellmann.judge.Place;
 import de.fellmann.judge.competition.controller.CompetitionController;
@@ -17,13 +23,12 @@ import de.fellmann.judge.competition.data.CompetitorState;
 import de.fellmann.judge.competition.data.Dance;
 import de.fellmann.judge.competition.data.DanceCompetitorJudgeKey;
 import de.fellmann.judge.competition.data.DisqualificationMode;
-import de.fellmann.judge.competition.data.Event;
 import de.fellmann.judge.competition.data.FinalResultData;
 import de.fellmann.judge.competition.data.Judge;
-import de.fellmann.judge.competition.data.Person;
 import de.fellmann.judge.competition.data.QualificationResultData;
 import de.fellmann.judge.competition.data.Round;
 import de.fellmann.judge.competition.data.RoundType;
+import de.fellmann.judge.competition.persistence.DataObjectConverter;
 
 public class CompetitionTest
 {
@@ -35,7 +40,6 @@ public class CompetitionTest
 		
 		for(int i=0;i<c.length;i++)
 		{
-			Person p = new Person();
 			c[i].setName("Competitor " + i);
 		}
 		
@@ -183,6 +187,11 @@ public class CompetitionTest
 		round.setRoundType(RoundType.End);
 		comp.getRounds().add(round);
 		
+		XStream xstream = new XStream();
+		long time = System.currentTimeMillis();
+		System.out.println(xstream.toXML(comp));
+		time = System.currentTimeMillis() - time;
+		System.out.println(time);
 		controller = new CompetitionController(comp);
 		controller.calculateAll();
 		Place[] expected = new Place[] {new Place(5), new Place(9), new Place(2), new Place(6), new Place(3), new Place(1), new Place(7), new Place(8), new Place(4)};

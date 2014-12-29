@@ -1,7 +1,6 @@
 
 package de.fellmann.judge.competition.data;
 
-
 public class Competitor extends DataObject
 {
 	private int countStarRounds;
@@ -59,5 +58,15 @@ public class Competitor extends DataObject
 	public void setPlacings(int placings)
 	{
 		this.placings = placings;
+	}
+
+	public Club getClub()
+	{
+		return club;
+	}
+
+	public void setClub(Club club)
+	{
+		this.club = club;
 	}
 }

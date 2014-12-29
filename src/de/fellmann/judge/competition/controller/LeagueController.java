@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import de.fellmann.judge.Place;
-import de.fellmann.judge.competition.PlaceSum;
+import de.fellmann.judge.PlaceSum;
 import de.fellmann.judge.competition.data.Competition;
 import de.fellmann.judge.competition.data.Competitor;
 import de.fellmann.judge.competition.data.League;

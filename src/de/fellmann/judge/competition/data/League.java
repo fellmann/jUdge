@@ -2,7 +2,7 @@ package de.fellmann.judge.competition.data;
 
 import java.util.ArrayList;
 
-public class League
+public class League extends DataObject
 {
 	private ArrayList<Competitor> competitors = new ArrayList<Competitor>();
 	private ArrayList<Competition> competitions = new ArrayList<Competition>();

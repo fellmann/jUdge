@@ -1,6 +1,8 @@
 package de.fellmann.judge.competition.data;
 
-public class Dance
+import javax.persistence.Entity;
+
+public class Dance extends DataObject
 {
 	private String name, shortname;
 

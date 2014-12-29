@@ -25,8 +25,6 @@ package de.fellmann.judge;
 
 import java.text.DecimalFormat;
 
-import de.fellmann.judge.competition.PlaceSum;
-
 /**
  * Representation of a result place.
  * <p>

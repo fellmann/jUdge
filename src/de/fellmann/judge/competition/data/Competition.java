@@ -2,6 +2,8 @@ package de.fellmann.judge.competition.data;
 
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+
 public class Competition extends DataObject
 {
 	private ArrayList<Round> rounds = new ArrayList<Round>();
