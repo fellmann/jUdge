@@ -1,83 +1,29 @@
 package de.fellmann.judge.competition.data;
 
-import java.util.UUID;
-
 public abstract class DataObject implements Comparable<DataObject>
 {
-	protected String uuid = UUID.randomUUID().toString();
-	protected long version = 0;
-	protected long createdTS = System.currentTimeMillis();
-	protected String createdAuthor = System.getProperty("user.name");
-	protected long editedTS = createdTS;
-	protected String editedAuthor = System.getProperty("user.name");
+	private static int maxID = 0;
 	
-	public long getCreatedTS()
+	private int id = maxID ++;
+	protected long version = 0;
+	protected long editTS = System.currentTimeMillis();
+	
+	public long getEditTS()
 	{
-		return createdTS;
+		return editTS;
 	}
 
-	public void setCreatedTS(long createdTS)
+	public void setEditTS(long editTS)
 	{
-		this.createdTS = createdTS;
+		this.editTS = editTS;
 	}
-
-	public String getCreatedAuthor()
-	{
-		return createdAuthor;
-	}
-
-	public void setCreatedAuthor(String createdAuthor)
-	{
-		this.createdAuthor = createdAuthor;
-	}
-
-	public long getEditedTS()
-	{
-		return editedTS;
-	}
-
-	public void setEditedTS(long editedTS)
-	{
-		this.editedTS = editedTS;
-	}
-
-	public String getEditedAuthor()
-	{
-		return editedAuthor;
-	}
-
-	public void setEditedAuthor(String editedAuthor)
-	{
-		this.editedAuthor = editedAuthor;
-	}
-
-	public String getUuid()
-	{
-		return uuid;
-	}
-
-	public void setUuid(String uuid)
-	{
-		this.uuid = uuid;
-	}
-
-	public long getVersion()
-	{
-		return version;
-	}
-
-	public void setVersion(long version)
-	{
-		this.version = version;
-	}
-
+	
 	@Override
 	public int hashCode()
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-		result = prime * result + (int) (version ^ (version >>> 32));
+		result = prime * result + id;
 		return result;
 	}
 
@@ -91,20 +37,43 @@ public abstract class DataObject implements Comparable<DataObject>
 		if (getClass() != obj.getClass())
 			return false;
 		DataObject other = (DataObject) obj;
-		if (uuid == null)
-		{
-			if (other.uuid != null)
-				return false;
-		}
-		else if (!uuid.equals(other.uuid))
-			return false;
-		if (version != other.version)
+		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public long getCreatedTS()
+	{
+		return editTS;
+	}
+
+	public void setCreatedTS(long createdTS)
+	{
+		this.editTS = createdTS;
+	}
+
+	public long getVersion()
+	{
+		return version;
+	}
+
+	public void setVersion(long version)
+	{
+		this.version = version;
 	}
 	
 	public int compareTo(DataObject o)
 	{
-		return uuid.compareTo(o.uuid);
+		return Integer.compare(id, o.id);
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 }

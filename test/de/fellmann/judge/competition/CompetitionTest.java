@@ -16,11 +16,12 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import de.fellmann.judge.Place;
 import de.fellmann.judge.competition.controller.CompetitionController;
+import de.fellmann.judge.competition.controller.SortTools;
 import de.fellmann.judge.competition.data.Competition;
 import de.fellmann.judge.competition.data.Competitor;
 import de.fellmann.judge.competition.data.CompetitorState;
 import de.fellmann.judge.competition.data.Dance;
-import de.fellmann.judge.competition.data.DanceCompetitorJudgeKey;
+import de.fellmann.judge.competition.data.Value;
 import de.fellmann.judge.competition.data.DisqualificationMode;
 import de.fellmann.judge.competition.data.FinalResultData;
 import de.fellmann.judge.competition.data.Judge;
@@ -67,41 +68,41 @@ public class CompetitionTest
 		data.setMinCrosses(6);
 		data.setSumToQualify(3);
 		
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[2], j[0]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[3], j[0]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[4], j[0]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[0]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[7], j[0]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[0]), true);
+		data.getMark().add(new Value(d, c[2], j[0], 1));
+		data.getMark().add(new Value(d, c[3], j[0], 1));
+		data.getMark().add(new Value(d, c[4], j[0], 1));
+		data.getMark().add(new Value(d, c[5], j[0], 1));
+		data.getMark().add(new Value(d, c[7], j[0], 1));
+		data.getMark().add(new Value(d, c[8], j[0], 1));
 		
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[0], j[1]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[2], j[1]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[3], j[1]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[4], j[1]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[1]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[1]), true);
+		data.getMark().add(new Value(d, c[0], j[1], 1));
+		data.getMark().add(new Value(d, c[2], j[1], 1));
+		data.getMark().add(new Value(d, c[3], j[1], 1));
+		data.getMark().add(new Value(d, c[4], j[1], 1));
+		data.getMark().add(new Value(d, c[5], j[1], 1));
+		data.getMark().add(new Value(d, c[8], j[1], 1));
 
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[0], j[2]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[2], j[2]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[3], j[2]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[4], j[2]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[2]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[2]), true);
+		data.getMark().add(new Value(d, c[0], j[2], 1));
+		data.getMark().add(new Value(d, c[2], j[2], 1));
+		data.getMark().add(new Value(d, c[3], j[2], 1));
+		data.getMark().add(new Value(d, c[4], j[2], 1));
+		data.getMark().add(new Value(d, c[5], j[2], 1));
+		data.getMark().add(new Value(d, c[8], j[2], 1));
 
 		
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[0], j[3]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[2], j[3]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[4], j[3]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[3]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[7], j[3]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[3]), true);
+		data.getMark().add(new Value(d, c[0], j[3], 1));
+		data.getMark().add(new Value(d, c[2], j[3], 1));
+		data.getMark().add(new Value(d, c[4], j[3], 1));
+		data.getMark().add(new Value(d, c[5], j[3], 1));
+		data.getMark().add(new Value(d, c[7], j[3], 1));
+		data.getMark().add(new Value(d, c[8], j[3], 1));
 
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[0], j[4]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[2], j[4]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[3], j[4]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[4], j[4]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[5], j[4]), true);
-		data.getCross().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), true);
+		data.getMark().add(new Value(d, c[0], j[4], 1));
+		data.getMark().add(new Value(d, c[2], j[4], 1));
+		data.getMark().add(new Value(d, c[3], j[4], 1));
+		data.getMark().add(new Value(d, c[4], j[4], 1));
+		data.getMark().add(new Value(d, c[5], j[4], 1));
+		data.getMark().add(new Value(d, c[8], j[4], 1));
 
 		
 		CompetitionController controller = new CompetitionController(comp);
@@ -109,7 +110,7 @@ public class CompetitionTest
 		int[] expected1RoundSums = new int[] {4, 0, 5, 4, 5, 5, 0, 2, 5};
 		for(int i=0;i<c.length;i++) {
 			assertEquals(expected1Round[i], controller.getPlace(c[i]));
-			assertEquals(expected1RoundSums[i], (int)((QualificationRoundResult)controller.getResult().getRoundResults().get(0)).getSumCompetitor().get(c[i]));
+			assertEquals(expected1RoundSums[i], (int)SortTools.findMark(((QualificationRoundResult)controller.getResult().getRoundResults().get(0)).getSums(), null, c[i], null));
 		}
 		
 		
@@ -120,23 +121,23 @@ public class CompetitionTest
 		FinalResultData finalData = new FinalResultData();
 		round.setResultData(finalData);
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[0]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[1]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[2]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[3]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[1], j[4]), 3);
+		finalData.getMark().add(new Value(d, c[1], j[0], 3));
+		finalData.getMark().add(new Value(d, c[1], j[1], 3));
+		finalData.getMark().add(new Value(d, c[1], j[2], 3));
+		finalData.getMark().add(new Value(d, c[1], j[3], 3));
+		finalData.getMark().add(new Value(d, c[1], j[4], 3));
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[0]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[1]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[2]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[3]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[6], j[4]), 2);
+		finalData.getMark().add(new Value(d, c[6], j[0], 1));
+		finalData.getMark().add(new Value(d, c[6], j[1], 1));
+		finalData.getMark().add(new Value(d, c[6], j[2], 1));
+		finalData.getMark().add(new Value(d, c[6], j[3], 1));
+		finalData.getMark().add(new Value(d, c[6], j[4], 2));
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[0]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[1]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[2]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[3]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[7], j[4]), 1);
+		finalData.getMark().add(new Value(d, c[7], j[0], 2));
+		finalData.getMark().add(new Value(d, c[7], j[1], 2));
+		finalData.getMark().add(new Value(d, c[7], j[2], 2));
+		finalData.getMark().add(new Value(d, c[7], j[3], 2));
+		finalData.getMark().add(new Value(d, c[7], j[4], 1));
 		
 		
 		
@@ -147,47 +148,48 @@ public class CompetitionTest
 		finalData = new FinalResultData();
 		round.setResultData(finalData);
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[0]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[1]), 6);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[2]), 4);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[3]), 5);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[0], j[4]), 5);
+		finalData.getMark().add(new Value(d, c[0], j[0], 2));
+		finalData.getMark().add(new Value(d, c[0], j[1], 6));
+		finalData.getMark().add(new Value(d, c[0], j[2], 4));
+		finalData.getMark().add(new Value(d, c[0], j[3], 5));
+		finalData.getMark().add(new Value(d, c[0], j[4], 5));
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[0]), 4);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[1]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[2]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[3]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[2], j[4]), 3);
+		finalData.getMark().add(new Value(d, c[2], j[0], 4));
+		finalData.getMark().add(new Value(d, c[2], j[1], 2));
+		finalData.getMark().add(new Value(d, c[2], j[2], 2));
+		finalData.getMark().add(new Value(d, c[2], j[3], 1));
+		finalData.getMark().add(new Value(d, c[2], j[4], 3));
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[0]), 6);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[1]), 5);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[2]), 6);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[3]), 6);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[3], j[4]), 6);
+		finalData.getMark().add(new Value(d, c[3], j[0], 6));
+		finalData.getMark().add(new Value(d, c[3], j[1], 5));
+		finalData.getMark().add(new Value(d, c[3], j[2], 6));
+		finalData.getMark().add(new Value(d, c[3], j[3], 6));
+		finalData.getMark().add(new Value(d, c[3], j[4], 6));
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[0]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[1]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[2]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[3]), 4);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[4], j[4]), 1);
+		finalData.getMark().add(new Value(d, c[4], j[0], 1));
+		finalData.getMark().add(new Value(d, c[4], j[1], 3));
+		finalData.getMark().add(new Value(d, c[4], j[2], 3));
+		finalData.getMark().add(new Value(d, c[4], j[3], 4));
+		finalData.getMark().add(new Value(d, c[4], j[4], 1));
 		
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[0]), 5);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[1]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[2]), 1);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[3]), 2);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[5], j[4]), 4);
+		finalData.getMark().add(new Value(d, c[5], j[0], 5));
+		finalData.getMark().add(new Value(d, c[5], j[1], 1));
+		finalData.getMark().add(new Value(d, c[5], j[2], 1));
+		finalData.getMark().add(new Value(d, c[5], j[3], 2));
+		finalData.getMark().add(new Value(d, c[5], j[4], 4));
 	
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[0]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[1]), 4);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[2]), 5);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[3]), 3);
-		finalData.getMark().put(new DanceCompetitorJudgeKey(d, c[8], j[4]), 2);
+		finalData.getMark().add(new Value(d, c[8], j[0], 3));
+		finalData.getMark().add(new Value(d, c[8], j[1], 4));
+		finalData.getMark().add(new Value(d, c[8], j[2], 5));
+		finalData.getMark().add(new Value(d, c[8], j[3], 3));
+		finalData.getMark().add(new Value(d, c[8], j[4], 2));
 		
 		round = new Round();
 		round.setRoundType(RoundType.End);
 		comp.getRounds().add(round);
 		
 		XStream xstream = new XStream();
+		xstream.registerConverter(new DataObjectConverter());
 		long time = System.currentTimeMillis();
 		System.out.println(xstream.toXML(comp));
 		time = System.currentTimeMillis() - time;

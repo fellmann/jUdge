@@ -1,19 +1,21 @@
 package de.fellmann.judge.competition.controller;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import de.fellmann.judge.Place;
 import de.fellmann.judge.PlaceSum;
 import de.fellmann.judge.competition.data.Competition;
 import de.fellmann.judge.competition.data.Competitor;
 import de.fellmann.judge.competition.data.League;
+import de.fellmann.judge.competition.result.Result;
+import de.fellmann.judge.competition.result.ResultSum;
 
 public class LeagueController
 {
 	private League league;
-	private HashMap<Competitor, Place> place = new HashMap<Competitor, Place>();
-	private HashMap<Competitor, PlaceSum> sum = new HashMap<Competitor, PlaceSum>();
+	private ArrayList<Result> place = new ArrayList<Result>();
+	private ArrayList<ResultSum> sum = new ArrayList<ResultSum>();
 	
 	public LeagueController(League league)
 	{
@@ -23,22 +25,24 @@ public class LeagueController
 	
 	public void calculate() {
 		place.clear();
+		sum.clear();
 		
-		for(Competition co : league.getCompetitions())
-		{
-			CompetitionController cc = new CompetitionController(co);
-			for(Competitor competitor : league.getCompetitors()) {
-				PlaceSum psum = sum.get(competitor);
-				psum = PlaceSum.createOrAdd(psum, cc.getPlace(competitor));
-				sum.put(competitor, psum);
+		final HashMap<Competitor, ResultSum> sums = new HashMap<Competitor, ResultSum>();
+		for(Competitor competitor : league.getCompetitors()) {
+			PlaceSum competititorSum = new PlaceSum();
+			for(Competition co : league.getCompetitions())
+			{
+				CompetitionController cc = new CompetitionController(co);
+				competititorSum.add(cc.getPlace(competitor));
 			}
+			sum.add(new ResultSum(competitor, competititorSum));
 		}
 		
 		SortTools.getPlacesByOrder(league.getCompetitors(), new Comparator<Competitor>() {
 			
 			public int compare(Competitor o1, Competitor o2)
 			{
-				return PlaceSum.compare(sum.get(o1), sum.get(o2));
+				return PlaceSum.compare(sums.get(o1).getPlaceSum(), sums.get(o2).getPlaceSum());
 			}
 		}, 0, place);
 	}

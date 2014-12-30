@@ -11,6 +11,7 @@ import de.fellmann.judge.competition.data.DisqualificationMode;
 import de.fellmann.judge.competition.data.ResultData;
 import de.fellmann.judge.competition.data.Round;
 import de.fellmann.judge.competition.result.CompetitionResult;
+import de.fellmann.judge.competition.result.Result;
 import de.fellmann.judge.competition.result.RoundResult;
 
 public class CompetitionController
@@ -159,7 +160,14 @@ public class CompetitionController
 	{
 		for(int r = getResult().getRoundResults().size()-1; r>=0; r--)
 		{
-			Place place = getResult().getRoundResults().get(r).getPlace().get(competitor);
+			Place place = null;
+			for(Result result : getResult().getRoundResults().get(r).getPlace()) {
+				if(result.getCompetitor().equals(competitor))
+				{
+					place = result.getPlace();
+					break;
+				}
+			}
 			if(place != null)
 			{
 				return place;
@@ -172,9 +180,13 @@ public class CompetitionController
 	{
 		for(int r = getResult().getRoundResults().size()-1; r>=0; r--)
 		{
-			Place place = getResult().getRoundResults().get(r).getPlace().get(competitor);
-			if(place != null)
-				return competition.getRounds().get(r);
+			Place place = null;
+			for(Result result : getResult().getRoundResults().get(r).getPlace()) {
+				if(result.getCompetitor().equals(competitor))
+				{
+					return competition.getRounds().get(r);
+				}
+			}
 		}
 		return null;
 	}

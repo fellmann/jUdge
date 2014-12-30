@@ -1,30 +1,29 @@
 
 package de.fellmann.judge.competition.data;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-import de.fellmann.judge.Place;
+import de.fellmann.judge.competition.result.Result;
 
 public class ManualResultData extends ResultData
 {
-	private HashMap<Competitor, Boolean> qualified = new HashMap<Competitor, Boolean>();
-	private HashMap<Competitor, Place> place = new HashMap<Competitor, Place>();
+	private ArrayList<Competitor> qualified = new ArrayList<Competitor>();
+	private ArrayList<Result> place = new ArrayList<Result>();
 	
-	public HashMap<Competitor, Boolean> getQualified()
+	public ArrayList<Competitor> getQualified()
 	{
 		return qualified;
 	}
-	public void setQualified(HashMap<Competitor, Boolean> qualified)
+	public void setQualified(ArrayList<Competitor> qualified)
 	{
 		this.qualified = qualified;
 	}
-	public HashMap<Competitor, Place> getPlace()
+	public ArrayList<Result> getPlace()
 	{
 		return place;
 	}
-	public void setPlace(HashMap<Competitor, Place> place)
+	public void setPlace(ArrayList<Result> place)
 	{
 		this.place = place;
 	}
-	
 }

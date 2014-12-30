@@ -1,18 +1,18 @@
 
 package de.fellmann.judge.competition.data;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class FinalResultData extends ResultData
 {
-	private HashMap<DanceCompetitorJudgeKey, Integer> mark = new HashMap<DanceCompetitorJudgeKey, Integer>();
+	private ArrayList<Value> mark = new ArrayList<Value>();
 
-	public HashMap<DanceCompetitorJudgeKey, Integer> getMark()
+	public ArrayList<Value> getMark()
 	{
 		return mark;
 	}
 
-	public void setMark(HashMap<DanceCompetitorJudgeKey, Integer> mark)
+	public void setMark(ArrayList<Value> mark)
 	{
 		this.mark = mark;
 	}
