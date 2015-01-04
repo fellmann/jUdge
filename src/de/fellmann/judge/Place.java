@@ -67,16 +67,6 @@ public class Place implements Comparable<Place>
 		placeto = to;
 	}
 
-	/**
-	 * Determines if a place is shared.
-	 *
-	 * @return True, if the place is shared.
-	 */
-	public boolean isShared()
-	{
-		return placefrom != placeto;
-	}
-
 	@Override
 	public int hashCode()
 	{
@@ -115,33 +105,9 @@ public class Place implements Comparable<Place>
 	}
 
 	/**
-	 * Returns the decimal value of this place.
-	 * <p>
-	 * If not shared, it equals the exact place. If shared, it equals the mean
-	 * value of the lower and upper range.
-	 * <p>
-	 * For example: <br>
-	 * 2.-3. place = 2.5 <br>
-	 * 1.-3. place = 2
-	 *
-	 * @return
-	 */
-	public double getValue()
-	{
-		if (isShared())
-		{
-			return (placefrom + placeto) / 2.;
-		}
-		else
-		{
-			return placefrom;
-		}
-	}
-
-	/**
 	 * Returns an integer value for sorting places.
 	 *
-	 * @return placeFrom + placeTo
+	 * @return placefrom + placeto
 	 */
 	public int getSortValue()
 	{
@@ -153,6 +119,27 @@ public class Place implements Comparable<Place>
 	}
 
 	/**
+	 * Get the lower place range.
+	 */
+	public int getPlaceFrom()
+	{
+		return placefrom;
+	}
+
+	/**
+	 * Get the higher place range.
+	 */
+	public int getPlaceTo()
+	{
+		return placeto;
+	}
+
+	public int compareTo(Place o)
+	{
+		return Integer.compare(this.placefrom + this.placeto, o.placefrom + o.placeto);
+	}
+
+	/**
 	 * Returns the String representation of this place ({@link getValue}) as
 	 * decimal value, formatted "#.#".
 	 *
@@ -161,26 +148,15 @@ public class Place implements Comparable<Place>
 	@Override
 	public String toString()
 	{
-		return df.format(getValue());
+		return df.format(toDouble());
 	}
-
-	/**
-	 * Returns the representation of this place with the range.
-	 * <p>
-	 * Example: <br>
-	 * Exact place: "2"<br>
-	 * Shared place: "2-3"
-	 */
-	public String toStringFromTo()
-	{
-		if (placefrom != placeto)
-		{
-			return placefrom + "-" + placeto;
-		}
-		else
-		{
-			return placefrom + "";
-		}
+	
+	public double toDouble() {
+		return (placefrom + placeto)/2.;
+	}
+	
+	public int toInt() {
+		return (placefrom + placeto);
 	}
 
 	/**
@@ -203,22 +179,6 @@ public class Place implements Comparable<Place>
 	}
 
 	/**
-	 * Get the lower place range.
-	 */
-	public int getPlaceFrom()
-	{
-		return placefrom;
-	}
-
-	/**
-	 * Get the higher place range.
-	 */
-	public int getPlaceTo()
-	{
-		return placeto;
-	}
-
-	/**
 	 * Adds an offset to a place.
 	 * 
 	 * @param offset
@@ -230,8 +190,22 @@ public class Place implements Comparable<Place>
 		return new Place(placefrom + offset, placeto + offset);
 	}
 
-	public int compareTo(Place o)
+	/**
+	 * Returns the representation of this place with the range.
+	 * <p>
+	 * Example: <br>
+	 * Exact place: "2"<br>
+	 * Shared place: "2-3"
+	 */
+	public String toStringFromTo()
 	{
-		return Integer.compare(this.placefrom + this.placeto, o.placefrom + o.placeto);
+		if (placefrom != placeto)
+		{
+			return placefrom + "-" + placeto;
+		}
+		else
+		{
+			return placefrom + "";
+		}
 	}
 }

@@ -103,22 +103,22 @@ class CalcMajority
 				{
 					if (judgement.isSet(competitor))
 					{
-						if (result[competitor].getValue() < minPlace[competitor].getValue())
+						if (result[competitor].compareTo(minPlace[competitor]) < 0)
 						{
 							minPlace[competitor] = result[competitor];
 						}
-						if (result[competitor].getValue() > maxPlace[competitor].getValue())
+						if (result[competitor].compareTo(maxPlace[competitor]) > 0)
 						{
 							maxPlace[competitor] = result[competitor];
 						}
 					}
 					else
 					{
-						if (result[competitor].getValue() < minunset.getValue())
+						if (result[competitor].compareTo(minunset) < 0)
 						{
 							minunset = result[competitor];
 						}
-						if (result[competitor].getValue() > maxunset.getValue())
+						if (result[competitor].compareTo(maxunset) > 0)
 						{
 							maxunset = result[competitor];
 						}

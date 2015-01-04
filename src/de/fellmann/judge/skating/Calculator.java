@@ -388,12 +388,12 @@ public class Calculator
 		for (int ix = 0; ix < remaining.size(); ix++)
 		{
 			competitor = remaining.get(ix);
-			cur = dancesCalc[0].getResult(competitor).getValue();
-			for (int dance = 1; dance < judgement.getDances(); dance++)
+			cur = 0;
+			for (int dance = 0; dance < judgement.getDances(); dance++)
 			{
 				if (isValid[dance])
 				{
-					cur += dancesCalc[dance].getResult(competitor).getValue();
+					cur += dancesCalc[dance].getResult(competitor).toDouble();
 				}
 			}
 			summe[competitor] = cur;
@@ -426,9 +426,9 @@ public class Calculator
 				for (int dance = 0; dance < judgement.getDances(); dance++)
 				{
 					if (isValid[dance]
-							&& dancesCalc[dance].getResult(competitor).getValue() <= aidx)
+							&& dancesCalc[dance].getResult(competitor).toDouble() <= aidx)
 					{
-						cur += dancesCalc[dance].getResult(competitor).getValue();
+						cur += dancesCalc[dance].getResult(competitor).toDouble();
 					}
 				}
 				table10_val2[competitor][aidx - 1] = cur;
@@ -467,7 +467,7 @@ public class Calculator
 				for (int dance = 0; dance < judgement.getDances(); dance++)
 				{
 					if (isValid[dance]
-					        && dancesCalc[dance].getResult(competitor).getValue() <= aidx)
+					        && dancesCalc[dance].getResult(competitor).toInt() <= aidx*2)
 					{
 						cur++;
 					}
@@ -497,12 +497,12 @@ public class Calculator
 		for (int i = 0; i < remaining.size(); i++)
 		{
 			x = remaining.get(i);
-			if (skatingCalc.getResult(x).getValue() < maxP)
+			if (skatingCalc.getResult(x).toInt() < maxP)
 			{
-				maxP = skatingCalc.getResult(x).getValue();
+				maxP = skatingCalc.getResult(x).toInt();
 				v.clear();
 			}
-			if (skatingCalc.getResult(x).getValue() == maxP)
+			if (skatingCalc.getResult(x).toInt() == maxP)
 			{
 				v.add(x);
 			}
