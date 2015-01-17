@@ -158,12 +158,12 @@ public class CalculatorTest
 			{
 				if (test.getResult(dance, competitor) != null)
 				{
-					assertEquals(Double.valueOf(resultForDance[dance]), test.getResult(dance, competitor).getValue(), 0.01);
+					assertEquals(Double.valueOf(resultForDance[dance]), test.getResult(dance, competitor).getSortValue() / 2.0, 0.01);
 				}
 				else
 				{
-					assertTrue(Double.valueOf(resultForDance[dance]) >= test.getPossibleResult(dance, competitor).getMinPlace().getValue() - 0.01);
-					assertTrue(Double.valueOf(resultForDance[dance]) <= test.getPossibleResult(dance, competitor).getMaxPlace().getValue() + 0.01);
+					assertTrue(Double.valueOf(resultForDance[dance]) >= test.getPossibleResult(dance, competitor).getMinPlace().getSortValue() / 2.0 - 0.01);
+					assertTrue(Double.valueOf(resultForDance[dance]) <= test.getPossibleResult(dance, competitor).getMaxPlace().getSortValue() / 2.0 + 0.01);
 				}
 			}
 		}
@@ -190,14 +190,14 @@ public class CalculatorTest
 				final double expected = Double.valueOf(resultForDance[dance]);
 				if (expected > 0)
 				{
-					assertEquals(expected, test.getResult(dance, competitor).getValue(), 0.01);
+					assertEquals(expected, test.getResult(dance, competitor).getSortValue() / 2.0, 0.01);
 				}
 			}
 		}
 		final String[] resultForFinal = resultForCompetitor[test.getJudgement().getCompetitors()].split(",");
 		for (int competitor = 0; competitor < test.getJudgement().getCompetitors(); competitor++)
 		{
-			assertEquals(Double.valueOf(resultForFinal[competitor]), test.getResult(competitor).getValue(), 0.01);
+			assertEquals(Double.valueOf(resultForFinal[competitor]), test.getResult(competitor).getSortValue() / 2.0, 0.01);
 		}
 	}
 

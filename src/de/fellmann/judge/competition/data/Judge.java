@@ -1,13 +1,12 @@
-package de.fellmann.judge.competition.data;
 
+package de.fellmann.judge.competition.data;
 
 public class Judge extends DataObject
 {
-	private String name;
+	private String name = "A";
 	private Club club;
-	
-	private String judgeId;
 
+	private String judgeId;
 
 	public String getJudgeId()
 	{
