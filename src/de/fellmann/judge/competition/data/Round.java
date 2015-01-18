@@ -6,10 +6,10 @@ import java.util.ArrayList;
 public class Round extends DataObject
 {
 	private ResultData resultProvider;
-	private ArrayList<Competitor> disqualified = new ArrayList<Competitor>();
+	private ArrayList<Disqualification> disqualified = new ArrayList<Disqualification>();
 	private RoundType roundType;
 	private Drawing drawing;
-	
+
 	public Round()
 	{
 	}
@@ -44,12 +44,12 @@ public class Round extends DataObject
 		this.drawing = drawing;
 	}
 
-	public ArrayList<Competitor> getDisqualified()
+	public ArrayList<Disqualification> getDisqualified()
 	{
 		return disqualified;
 	}
 
-	public void setDisqualified(ArrayList<Competitor> disqualified)
+	public void setDisqualified(ArrayList<Disqualification> disqualified)
 	{
 		this.disqualified = disqualified;
 	}
