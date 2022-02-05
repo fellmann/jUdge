@@ -29,127 +29,141 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class CalculatorTest
-{
-	private static String BEISPIEL_B = "11144,32211,25522,43453,54335,66666";
-	private static String BEISPIEL_B_RESULT = "1;2;3;4;5;6;1,2,3,4,5,6";
+public class CalculatorTest {
+    @Test
+    public void testBeispielA() {
+        testBeispiel("15112 1,22541 2,33323 3,44234 4,51455 5,66666 6;1,2,3,4,5,6");
+    }
 
-	private static String BEISPIEL_P = "22525,33636,45311,11253,66144,54462;12234,31313,25555,44441,66666,53122;11111,23456,34562,45623,52234,66345;33136,11252,45441,56323,22515,64664;26261,44636,15152,63345,51514,32423,";
-	private static String BEISPIEL_P_INCOMPLETE = "22525,33636,45311,11253,00000,00000;12204,31313,25055,44441,60066,53122;11111,00000,34562,45623,52234,66345;33136,11252,45441,56323,02505,64664;26261,40636,15102,63305,01514,30423,";
-	private static String BEISPIEL_P_RESULT = "2,1,1,3,2;4,3,4,1,6;3,5,4,5,1;1,4,4,4,5;5,6,2,2,4;6,2,6,6,3;1,2,3,4,5,6";
-	
-	private static String BEISPIEL_E = "1";
-	private static String BEISPIEL_E_RESULT = "1";
+    @Test
+    public void testBeispielB() {
+        testBeispiel("11144 1,32211 2,25522 3,43453 4,54335 5,66666 6;1,2,3,4,5,6");
+    }
 
-	@Test
-	public void testBeispielB()
-	{
-		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_B, 1, 6, 5));
+    @Test
+    public void testBeispielC() {
+        testBeispiel("11155 1,22514 2,55222 3,33461 4,44333 5,66646 6;1,2,3,4,5,6");
+    }
 
-		assertResultFromString(test, BEISPIEL_B_RESULT);
-	}
+    @Test
+    public void testBeispielD() {
+        testBeispiel("21511 1,12255 2,56122 3,33336 4,44464 5,65643 6;1,2,3,4,5,6");
+    }
 
-	@Test
-	public void testBeispielP()
-	{
-		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_P, 5, 6, 5));
+    @Test
+    public void testBeispielE() {
+        testBeispiel("21511 1,12255 2.5,55122 2.5,33336 4,44464 5,66643 6;1,2.5,2.5,4,5,6");
+    }
 
-		assertResultFromString(test, BEISPIEL_P_RESULT);
-	}
-	
-	@Test
-	public void testBeispielEdgeCase1()
-	{
-		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_E, 1, 1, 1));
+    @Test
+    public void testBeispielF() {
+        testBeispiel("1 1,3 3,2 2,4 4,5 5,6 6;2 2,1 1,3 3,4 4,5 5,6 6;1 1,2 2,3 3,4 4,5 5,6 6;2 2,1 1,3 3,4 4,5 5,6 6;2 2,4 4,3 3,1 1,6 6,5 5;1,2,3,4,5,6");
+    }
 
-		assertResultFromString(test, BEISPIEL_E_RESULT);
-	}
+    @Test
+    public void testBeispielG() {
+        testBeispiel("1 1,3 3,2 2,4 4,6 6,5 5;1 1,3 3,5 5,2 2,6 6,4 4;2 2,1 1,4 4,3 3,5 5,6 6;5 5,2 2,4 4,6 6,1 1,3 3;1,2,4,3,6,5");
+    }
 
-	@Test
-	public void testBeispielP_parts()
-	{
-		final Calculator test = new Calculator(
-		        createJudgmentFromString(BEISPIEL_P_INCOMPLETE, 5, 6, 5));
-		for (int c = 0; c < 6; c++)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				assertEquals(test.getJudgement().isValid(0, c, j), c < 4);
-			}
-		}
+    @Test
+    public void testBeispielH() {
+        testBeispiel("3 3,2 2,1 1,4 4,5 5,6 6;1 1,2 2,4 4,5 5,3 3,6 6;1 1,3 3,2 2,6 6,5 5,4 4;1 1,2 2,5 5,4 4,3 3,6 6;1 1,6 6,3 3,2 2,5 5,4 4;1,2,3,4,5,6");
+    }
 
-		assertPreResultFromString(test, BEISPIEL_P_RESULT);
-	}
+    @Test
+    public void testBeispielJ() {
+        testBeispiel("1 1,3 3,2 2,6 6,5 5,4 4;1 1,4 4,2 2,3 3,5 5,6 6;2 2,1 1,3 3,4 4,5 5,6 6;3 3,2 2,1 1,5 5,4 4,6 6;2 2,1 1,3 3,5 5,4 4,6 6;1,2,3,4,5,6");
+    }
 
-	private void assertPreResultFromString(Calculator test, String result)
-	{
-		final String[] resultForCompetitor = result.split(";");
-		for (int competitor = 0; competitor < test.getJudgement().getCompetitors(); competitor++)
-		{
-			final String[] resultForDance = resultForCompetitor[competitor].split(",");
+    @Test
+    public void testBeispielK() {
+        testBeispiel("2 2,1 1,6 6,4 4,5 5,3 3;1 1,2 2,6 6,4 4,3 3,5 5;5 5,2 2,1 1,4 4,3 3,6 6;3 3,6 6,1 1,4 4,2 2,5 5;2 2,6 6,3 3,1 1,4 4,5 5;1,2,3,4,5,6");
+    }
 
-			for (int dance = 0; dance < test.getJudgement().getDances(); dance++)
-			{
-				if (test.getResult(dance, competitor) != null)
-				{
-					assertEquals(Double.valueOf(resultForDance[dance]), test.getResult(dance, competitor).getValue(), 0.01);
-				}
-				else
-				{
-					assertTrue(Double.valueOf(resultForDance[dance]) >= test.getPossibleResult(dance, competitor).getMinPlace().getValue() - 0.01);
-					assertTrue(Double.valueOf(resultForDance[dance]) <= test.getPossibleResult(dance, competitor).getMaxPlace().getValue() + 0.01);
-				}
-			}
-		}
-	}
+    @Test
+    public void testBeispielM() {
+        testBeispiel(
+                "11253 1,22525 2,45311 3,33636 4,66144 5,54462 6;" +
+                        "12234 1,53122 2,31313 3,44441 4,25555 5,66666 6;" +
+                        "11223 1.5,32112 1.5,53361 3,26634 4,44556 5.5,65445 5.5;" +
+                        "22515 2,11252 1,56323 4,33136 3,64664 6,45441 5;" +
+                        "26261 2,15152 1,32424 4,51513 3,44636 6,63345 5;" +
+                        "2,1,3,4,6,5"
+        );
+    }
 
-	private void assertResultFromString(Calculator test, String result)
-	{
+    @Test
+    public void testBeispielN() {
+        testBeispiel(
+                "11253 1,22525 2,33636 4,45311 3,66144 5,54462 6;" +
+                        "12234 1,53122 2,44441 4,31313 3,25555 5,66666 6;" +
+                        "11111 1,23456 4,34562 4,45623 4,52234 2,66345 6;" +
+                        "11252 1,56323 4,22515 2,33136 3,45441 5,64664 6;" +
+                        "15152 1,32424 4,26261 2,51513 3,63345 5,44636 6;" +
+                        "1,2,3,4,5,6"
+        );
+    }
 
-		final String[] resultForCompetitor = result.split(";");
-		for (int competitor = 0; competitor < test.getJudgement().getCompetitors(); competitor++)
-		{
-			final String[] resultForDance = resultForCompetitor[competitor].split(",");
+    @Test
+    public void testBeispielP() {
+        testBeispiel(
+                "22525 2,33636 4,45311 3,11253 1,66144 5,54462 6;" +
+                        "12234 1,31313 3,25555 5,44441 4,66666 6,53122 2;" +
+                        "11111 1,23456 4,34562 4,45623 4,52234 2,66345 6;" +
+                        "33136 3,11252 1,45441 5,56323 4,22515 2,64664 6;" +
+                        "26261 2,44636 6,15152 1,63345 5,51514 4,32423 3;" +
+                        "1,2,3,4,5,6"
+        );
+    }
 
-			for (int dance = 0; dance < test.getJudgement().getDances(); dance++)
-			{
-				assertEquals(Double.valueOf(resultForDance[dance]), test.getResult(dance, competitor).getValue(), 0.01);
-			}
-		}
-		final String[] resultForFinal = resultForCompetitor[test.getJudgement().getCompetitors()].split(",");
-		for (int competitor = 0; competitor < test.getJudgement().getCompetitors(); competitor++)
-		{
-			assertEquals(Double.valueOf(resultForFinal[competitor]), test.getResult(competitor).getValue(), 0.01);
-		}
-	}
+    @Test
+    public void testEdge1() {
+        testBeispiel("1 1;1");
+    }
 
-	private JudgementForFinal createJudgmentFromString(String gradesString, int dances, int competitors, int judges)
-	{
-		final String[] judgmentsForDance = gradesString.split(";");
+    @Test
+    public void testEdge2() {
+        testBeispiel(
+                "1 1,2 2,3 3,4 4,5 5;" +
+                        "2 2,3 3,4 4,5 5,1 1;" +
+                        "3 3,4 4,5 5,1 1,2 2;" +
+                        "4 4,5 5,1 1,2 2,3 3;" +
+                        "5 5,1 1,2 2,3 3,4 4;" +
+                        "3,3,3,3,3");
+    }
 
-		final JudgementForFinal jff = new JudgementForFinal(dances,
-		        competitors, judges);
+    private void testBeispiel(String text) {
+        String[] dances = text.split(";");
+        int countDances = Math.max(dances.length - 1, 1);
+        int countCompetitors = dances[0].split(",").length;
+        int countJudges = dances[0].split(",")[0].split(" ")[0].length();
 
-		for (int d = 0; d < judgmentsForDance.length; d++)
-		{
-			final String[] judgmentsForCompetitor = judgmentsForDance[d].split(",");
+        JudgementForFinal judgement = new JudgementForFinal(countDances, countCompetitors, countJudges);
 
-			for (int i = 0; i < judgmentsForCompetitor.length; i++)
-			{
-				for (int j = 0; j < judgmentsForCompetitor[j].length(); j++)
-				{
-					if (judgmentsForCompetitor[i].charAt(j) > '0'
-					        && judgmentsForCompetitor[i].charAt(j) < '9')
-					{
-						jff.setMark(d, i, j, (byte) (judgmentsForCompetitor[i].charAt(j) - '0'));
-					}
-				}
-			}
-		}
+        for (int d = 0; d < countDances; d++) {
+            String[] competitors = dances[d].split(",");
+            for (int c = 0; c < countCompetitors; c++) {
+                String[] competitor = competitors[c].split(" ");
+                for (int j = 0; j < countJudges; j++) {
+                    judgement.setMark(d, c, j, (byte) (competitor[0].charAt(j) - '0'));
+                }
+            }
+        }
 
-		return jff;
-	}
+        Calculator calculator = new Calculator(judgement);
+
+        for (int d = 0; d < countDances; d++) {
+            String[] competitors = dances[d].split(",");
+            for (int c = 0; c < countCompetitors; c++) {
+                String[] competitor = competitors[c].split(" ");
+                assertEquals("dance " + d + ", competitor " + c, Double.parseDouble(competitor[1]), calculator.getResult(d, c).getValue(), 0.01);
+            }
+        }
+        if (dances.length > countDances) {
+            String[] competitors = dances[dances.length - 1].split(",");
+            for (int c = 0; c < countCompetitors; c++) {
+                assertEquals("competitor " + c + " result", Double.parseDouble(competitors[c]), calculator.getResult(c).getValue(), 0.01);
+            }
+        }
+    }
 }

@@ -296,7 +296,7 @@ public class Calculator
 
 		int wantedPlaceweg;
 
-		IntList curmaj, curSums = new IntList();
+		IntList curmaj, curSums;
 
 		curmaj = getByPlaceCount(wantedPlace, which);
 
@@ -313,16 +313,16 @@ public class Calculator
 		}
 		else
 		{
-			which.removeAll(curmaj);
 
 			curSums = getByDigitSums(curmaj, wantedPlace);
-			while (curSums.size() > 0)
+			if (curSums.size() > 0)
 			{
 				if (curSums.size() == 1)
 				{
 					wantedPlaceweg = curSums.get(0);
 					result[wantedPlaceweg] = new Place(wantedPlace);
 					curmaj.remove(wantedPlaceweg);
+					which.remove(wantedPlaceweg);
 
 					if (curmaj.size() > 0)
 					{
@@ -333,9 +333,9 @@ public class Calculator
 				{
 					getSkating(wantedPlace, curSums.byval());
 					curmaj.removeAll(curSums);
+					which.removeAll(curSums);
 				}
 				wantedPlace += curSums.size();
-				curSums = getByDigitSums(curmaj, wantedPlace);
 			}
 
 			if (which.size() > 0)
